@@ -464,6 +464,195 @@
       .btn-franchise-pdf:hover, .btn-franchise-email:hover { transform: translateY(-1px); }
     }
 
+    /* ── FRANCHISE GUIDE (PDF → Web) ── */
+    .franchise-intro {
+      text-align: center;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+    .franchise-intro-eyebrow {
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+    .franchise-intro-title {
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+      font-size: 30px;
+      font-weight: 600;
+      color: #f5f5f7;
+      line-height: 1.15;
+      margin: 4px 0 10px;
+    }
+    .franchise-intro-title em {
+      display: block;
+      font-style: normal;
+      color: #d9b866;
+    }
+    .franchise-intro-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    .franchise-cover-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 18px;
+    }
+
+    .benefit-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .benefit-card {
+      background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
+      border-radius: 16px;
+      padding: 18px 18px 20px;
+      color: #1c2b16;
+    }
+    .benefit-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .benefit-num {
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+      font-style: italic;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: #9a7a2e;
+    }
+    .benefit-num b {
+      font-style: italic;
+      font-size: 19px;
+      font-weight: 600;
+      margin-left: 3px;
+    }
+    .benefit-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .benefit-title-en {
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+      font-size: 19px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: #16281b;
+      margin: 0 0 4px;
+    }
+    .benefit-title-jp {
+      font-size: 13px;
+      color: rgba(28,43,22,0.72);
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+    .benefit-divider {
+      height: 1px;
+      background: rgba(28,43,22,0.14);
+      margin-bottom: 12px;
+    }
+    .benefit-desc-en {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #2a3a24;
+      margin-bottom: 6px;
+    }
+    .benefit-desc-jp {
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: rgba(28,43,22,0.65);
+    }
+    @media (min-width: 700px) {
+      .benefit-list {
+        grid-template-columns: 1fr 1fr;
+        width: 100vw;
+        max-width: 720px;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    /* ── FRANCHISE JOIN CTA ── */
+    .join-section {
+      background: linear-gradient(180deg, #16281b 0%, #0d2a26 100%);
+      border-radius: 18px;
+      padding: 26px 20px 24px;
+      text-align: center;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .join-title-en {
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+      font-size: 24px;
+      font-weight: 600;
+      color: #d9b866;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+    .join-title-jp {
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 4px;
+      letter-spacing: 0.03em;
+    }
+    .join-copy {
+      font-size: 12.5px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      margin-top: 16px;
+      text-align: left;
+    }
+    .join-copy + .join-copy { margin-top: 10px; }
+    .join-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px 14px;
+      margin-top: 22px;
+    }
+    .join-feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 84px;
+    }
+    .join-feature img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .join-feature span {
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: rgba(255,255,255,0.8);
+    }
+    .join-photo {
+      display: block;
+      max-width: 220px;
+      width: 68%;
+      height: auto;
+      margin: 20px auto 0;
+    }
+    .franchise-secondary-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     /* ── MENU FULLSCREEN MODAL ── */
     .menu-overlay {
       position: fixed;
@@ -830,9 +1019,289 @@
 
   <div class="section-label reveal">Franchise</div>
 
-  <div class="franchise-actions">
-    <a class="btn-franchise-pdf reveal reveal-scale" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
-    <a class="btn-franchise-email reveal reveal-d1" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+  <div class="franchise-intro reveal">
+    <div class="franchise-intro-eyebrow">MATCHA TIMES</div>
+    <div class="franchise-intro-title">Master Franchise<em>20 Benefits</em></div>
+    <div class="franchise-intro-sub">拡張性の高いグローバル抹茶フランチャイズのご提案</div>
+    <img class="franchise-cover-img" src="assets/franchise/franchise-cover-drinks.webp" alt="MATCHA TIMES matcha drink lineup">
+  </div>
+
+  <div class="benefit-list">
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>01</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-01.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">The World&rsquo;s First Customizable Matcha Concept</h3>
+      <div class="benefit-title-jp">世界初のカスタマイズ型抹茶専門店</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Customers can choose matcha grade, milk type, sweetness level, and toppings to create a personalized matcha experience.</p>
+      <p class="benefit-desc-jp">抹茶グレード、ミルク、甘さ、トッピングを自由に選べるため、一人ひとりに合った抹茶体験を提供できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>02</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-02.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Social Media-Friendly Mini Taiyaki Toppings</h3>
+      <div class="benefit-title-jp">SNS映えするミニたい焼きトッピング</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Our signature mini taiyaki toppings create a cute and memorable visual that naturally encourages social media sharing.</p>
+      <p class="benefit-desc-jp">ミニたい焼きトッピングの可愛らしいビジュアルにより、自然なSNS投稿や口コミ拡散が期待できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>03</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-03.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Stable Supply of Premium Japanese Matcha</h3>
+      <div class="benefit-title-jp">高品質な日本産抹茶の安定供給</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">We work with established Japanese matcha producers to provide high-quality matcha at stable and competitive prices.</p>
+      <p class="benefit-desc-jp">日本の老舗抹茶メーカーと連携し、高品質な抹茶を安定的かつ競争力のある価格で供給します。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>04</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-04.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Riding the Global Growth of the Matcha Market</h3>
+      <div class="benefit-title-jp">世界的な抹茶市場の成長</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Matcha is growing worldwide as a symbol of health, beauty, Japanese culture, and premium beverage experiences.</p>
+      <p class="benefit-desc-jp">抹茶は健康、美容、日本文化、プレミアムドリンクの象徴として、世界中で需要が拡大しています。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>05</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-05.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Efficient Operations with Minimal Staff</h3>
+      <div class="benefit-title-jp">少人数で運営しやすい店舗モデル</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">The business does not require complex cooking processes, allowing stores to operate efficiently with a small team.</p>
+      <p class="benefit-desc-jp">複雑な調理工程を必要としないため、少人数でも効率的に店舗運営を行うことができます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>06</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-06.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Simple Staff Training Through Standardized Operations</h3>
+      <div class="benefit-title-jp">スタッフ教育が容易</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Standardized operations allow staff to learn quickly, making the model suitable for multi-store expansion.</p>
+      <p class="benefit-desc-jp">オペレーションを標準化しやすく、短期間でスタッフ育成が可能なため、多店舗展開にも適しています。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>07</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-07.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Lower Initial Investment for Store Opening</h3>
+      <div class="benefit-title-jp">初期投資を抑えた出店が可能</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">No large kitchen or heavy cooking equipment is required, reducing startup costs compared with cafés or restaurants.</p>
+      <p class="benefit-desc-jp">大型厨房や重飲食設備が不要なため、一般的なカフェやレストランより低コストで出店できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>08</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-08.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Flexible Store Formats for Various Locations</h3>
+      <div class="benefit-title-jp">小型店舗から多様な立地まで対応可能</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">MATCHA TIMES can be operated in malls, airports, stations, tourist areas, kiosks, and compact retail spaces.</p>
+      <p class="benefit-desc-jp">ショッピングモール、空港、駅、観光地、キオスク、小型店舗など、幅広い立地に対応できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>09</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-09.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Competitive Franchise Conditions for Investors</h3>
+      <div class="benefit-title-jp">投資家に提案しやすいフランチャイズ条件</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Our franchise structure is designed to be accessible while supporting attractive investment returns.</p>
+      <p class="benefit-desc-jp">参入しやすい加盟条件を設計しながら、投資回収を見込みやすいフランチャイズモデルです。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>10</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-10.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Exclusive Sub-Franchise Rights in Your Territory</h3>
+      <div class="benefit-title-jp">対象エリアでのサブフランチャイズ販売権</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Master Franchise partners can recruit and manage franchisees within their territory, creating an additional revenue stream.</p>
+      <p class="benefit-desc-jp">Master Franchise パートナーは対象エリア内で加盟店を募集・管理し、加盟金収益を得ることができます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>11</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-11.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Multiple Revenue Streams from 4 Sources</h3>
+      <div class="benefit-title-jp">4つの収益源による複数収益モデル</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">The model creates income opportunities through store sales, sub-franchise fees, royalties, and matcha supply profits.</p>
+      <p class="benefit-desc-jp">店舗売上、サブFC加盟金、ロイヤルティ、抹茶・資材販売利益により、複数の収益源を構築できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>12</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-12.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Attractive Profit Margins from Matcha Beverages</h3>
+      <div class="benefit-title-jp">抹茶ドリンクによる高い利益率</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Matcha beverages have relatively low ingredient costs and strong pricing power, helping secure healthy gross margins.</p>
+      <p class="benefit-desc-jp">抹茶ドリンクは原価を抑えやすく、プレミアム価格で販売しやすいため、高い粗利益を確保しやすい商品です。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>13</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-13.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Delivery-Friendly Business Model for Wider Sales</h3>
+      <div class="benefit-title-jp">売上機会を広げるデリバリー対応モデル</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Our products perform well on delivery platforms such as Grab, Foodpanda, and Uber Eats, expanding sales opportunities.</p>
+      <p class="benefit-desc-jp">Grab、Foodpanda、Uber Eats などのデリバリーサービスでも展開しやすく、売上機会の拡大が期待できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>14</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-14.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Easy Product Localization for Each Market</h3>
+      <div class="benefit-title-jp">各国市場に合わせた商品ローカライズ</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Menus can be adapted with local flavors such as strawberry, mango, coconut, chocolate, coffee, and more.</p>
+      <p class="benefit-desc-jp">ストロベリー、マンゴー、ココナッツ、チョコレート、コーヒーなど、各国の嗜好に合わせた展開が可能です。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>15</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-15.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Strong Potential for Expansion into Halal Markets</h3>
+      <div class="benefit-title-jp">ハラール市場への展開可能性</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Matcha is naturally suitable for Muslim-majority markets, including Southeast Asia and the Middle East.</p>
+      <p class="benefit-desc-jp">抹茶はイスラム圏でも受け入れられやすく、東南アジアや中東などの市場にも展開しやすい商品です。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>16</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-16.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Authentic Japanese Brand Value with Premium Appeal</h3>
+      <div class="benefit-title-jp">プレミアム訴求できる本物の日本ブランド価値</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Japanese matcha is associated with quality, trust, and craftsmanship, allowing strong premium brand positioning.</p>
+      <p class="benefit-desc-jp">日本産抹茶は品質、信頼、職人性と結びつきやすく、プレミアムブランドとして訴求できます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>17</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-17.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Additional Retail Revenue from Matcha Products</h3>
+      <div class="benefit-title-jp">抹茶関連商品の物販による追加収益</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Partners can generate extra income through matcha powder, tea whisks, tea bowls, gift sets, and related merchandise.</p>
+      <p class="benefit-desc-jp">抹茶粉末、茶筅、茶碗、ギフトセット、関連グッズなどの販売により、追加収益を生み出せます。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>18</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-18.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Strong Appeal to Tourists &amp; Commercial Locations</h3>
+      <div class="benefit-title-jp">観光地・商業施設との高い親和性</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Matcha is one of the most recognizable symbols of Japanese culture, making it highly attractive in tourist locations.</p>
+      <p class="benefit-desc-jp">抹茶は日本文化を象徴する商品であり、観光地や商業施設との相性が非常に高いコンテンツです。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>19</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-19.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Proven International Know-How for Market Expansion</h3>
+      <div class="benefit-title-jp">市場展開に活かせる国際展開ノウハウ</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Partners gain access to operational know-how, product development, and marketing systems built across multiple countries.</p>
+      <p class="benefit-desc-jp">複数国での展開を通じて蓄積した運営ノウハウ、商品開発、マーケティング手法を共有します。</p>
+    </div>
+
+    <div class="benefit-card reveal">
+      <div class="benefit-card-top">
+        <span class="benefit-num">Benefits <b>20</b></span>
+        <img class="benefit-icon" src="assets/franchise/benefits/benefit-20.webp" alt="">
+      </div>
+      <h3 class="benefit-title-en">Future Brand Value Growth Through Early Entry</h3>
+      <div class="benefit-title-jp">早期参入による将来的なブランド価値向上</div>
+      <div class="benefit-divider"></div>
+      <p class="benefit-desc-en">Early partners can secure exclusive country rights and grow together with a fast-expanding global brand.</p>
+      <p class="benefit-desc-jp">早期に参入することで、国単位の独占権を活かしながら、成長ブランドの拡大メリットを得られます。</p>
+    </div>
+
+  </div>
+  <div class="join-section reveal reveal-card">
+    <div class="join-title-en">JOIN THE FUTURE OF MATCHA</div>
+    <div class="join-title-jp">抹茶ビジネスの未来へ</div>
+    <p class="join-copy">MATCHA TIMES is a global lifestyle brand built to bring authentic Japanese matcha culture to the world, inviting Master Franchise Partners to lead its growth in their own countries.</p>
+    <p class="join-copy">MATCHA TIMES は本物の日本抹茶文化を世界へ広げるグローバルライフスタイルブランドとして、各国の Master Franchise Partner と共に成長していきます。</p>
+    <div class="join-features">
+      <div class="join-feature">
+        <img src="assets/franchise/cta-authentic.webp" alt="">
+        <span>Authentic<br>Japanese Matcha</span>
+      </div>
+      <div class="join-feature">
+        <img src="assets/franchise/cta-simple.webp" alt="">
+        <span>Simple<br>Operations</span>
+      </div>
+      <div class="join-feature">
+        <img src="assets/franchise/cta-multiple.webp" alt="">
+        <span>Multiple<br>Revenue Streams</span>
+      </div>
+      <div class="join-feature">
+        <img src="assets/franchise/cta-scalable.webp" alt="">
+        <span>Scalable<br>Franchise Model</span>
+      </div>
+      <div class="join-feature">
+        <img src="assets/franchise/cta-exclusive.webp" alt="">
+        <span>Exclusive<br>Country Rights</span>
+      </div>
+    </div>
+    <img class="join-photo" src="assets/franchise/franchise-ninja.webp" alt="MATCHA NINJA Tomoki">
+  </div>
+
+  <div class="franchise-secondary-actions">
+    <a class="btn-franchise-email reveal" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+    <a class="btn-franchise-pdf reveal reveal-d1" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Original PDF</a>
   </div>
 
   <div class="footer reveal">© 2026 Matcha Times Japan</div>
