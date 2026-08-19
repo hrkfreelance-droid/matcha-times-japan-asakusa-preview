@@ -589,15 +589,19 @@
     }
     .franchise-modal-title {
       font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
-      font-size: 16px;
+      font-size: 13px;
       font-weight: 600;
       color: #16281b;
       line-height: 1.3;
+      white-space: nowrap;
     }
     .franchise-modal-title em {
+      display: block;
       font-style: normal;
+      font-size: 21px;
+      font-weight: 600;
       color: #9a7a2e;
-      margin-left: 4px;
+      margin-top: 2px;
     }
     .franchise-modal-body {
       padding: 18px 16px 26px;
@@ -1010,13 +1014,6 @@
 
   <div class="section-label reveal">Franchise</div>
 
-  <div class="franchise-intro reveal">
-    <div class="franchise-intro-eyebrow">MATCHA TIMES</div>
-    <div class="franchise-intro-title">Master Franchise<em>20 Benefits</em></div>
-    <div class="franchise-intro-sub">拡張性の高いグローバル抹茶フランチャイズのご提案</div>
-    <img class="franchise-cover-img" src="assets/franchise/franchise-cover-drinks.webp" alt="MATCHA TIMES matcha drink lineup">
-  </div>
-
   <div class="franchise-secondary-actions reveal">
     <button class="btn-franchise-pdf" type="button" id="franchise-trigger" aria-expanded="false" aria-controls="franchise-panel">📖 View Franchise Guide</button>
     <a class="btn-franchise-email" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
@@ -1031,7 +1028,7 @@
     <button class="menu-drawer-close" type="button" aria-label="Close franchise guide" tabindex="-1">×</button>
     <div class="menu-panel-scroll" id="franchise-scroll">
       <div class="franchise-modal-sticky">
-        <div class="franchise-modal-title">MATCHA TIMES Master Franchise <em>20 Benefits</em></div>
+        <div class="franchise-modal-title">MATCHA TIMES Master Franchise<em>20 Benefits</em></div>
       </div>
       <div class="franchise-modal-body">
         <div class="franchise-intro-sub">拡張性の高いグローバル抹茶フランチャイズのご提案</div>
@@ -1290,7 +1287,6 @@
 
         <div class="franchise-secondary-actions">
           <a class="btn-franchise-pdf reveal" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Original PDF</a>
-          <a class="btn-franchise-email reveal reveal-d1" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
         </div>
       </div>
     </div>
