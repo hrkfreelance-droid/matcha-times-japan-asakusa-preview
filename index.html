@@ -207,16 +207,11 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.14);
       text-decoration: none;
-      transition: background 0.18s, transform 0.12s;
+      transition: transform 0.12s;
     }
-    .store-ig:active { transform: scale(0.94); background: rgba(255,255,255,0.16); }
-    .store-ig img { width: 18px; height: 18px; display: block; }
+    .store-ig:active { transform: scale(0.92); }
+    .store-ig img { width: 30px; height: 30px; display: block; }
     .store-hours {
       font-size: 12px;
       color: rgba(255, 255, 255, 0.55);
@@ -238,8 +233,8 @@
       min-height: 40px;
       padding: 9px 12px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #f5f5f7;
+      background: #fff;
+      color: #1a2711;
       text-decoration: none;
       border: 0;
       font-family: inherit;
@@ -247,7 +242,9 @@
       font-weight: 600;
       text-align: center;
       cursor: pointer;
+      transition: opacity 0.12s, transform 0.12s;
     }
+    .store-link:active { transform: scale(0.97); opacity: 0.85; }
     .btn {
       flex: 1;
       display: inline-flex;
@@ -266,8 +263,6 @@
     .btn:active { transform: scale(0.94); opacity: 0.82; }
     .btn-tel  { background: rgba(255, 255, 255, 0.12); color: #f5f5f7; }
     .btn-map  { background: #1a2711; border: 1px solid rgba(255,255,255,0.1); color: #fff; }
-    .store-link[href*="google.com/maps"] { background: #1a2711; color: #fff; }
-    .store-link.btn-menu { background: #fff; color: #1a2711; }
 
     .menu-box {
       display: flex;
@@ -293,7 +288,6 @@
     }
 
     .store-link.btn-delivery {
-      background: rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -306,48 +300,26 @@
       object-fit: contain;
     }
 
-    /* ── GLASS SECTION CARDS (World / Franchise) ── */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      padding: 16px 16px 17px;
-      margin-bottom: 10px;
-    }
-    .glass-card-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #f5f5f7;
-      letter-spacing: -0.01em;
-      margin-bottom: 4px;
-    }
-    .glass-card-sub {
-      font-size: 12.5px;
-      color: rgba(255, 255, 255, 0.6);
-      line-height: 1.5;
-      margin-bottom: 14px;
-    }
-
     /* ── WORLD GRID ── */
     .world-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
     .country-card {
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      min-height: 64px;
-      padding: 12px 8px;
-      border-radius: 14px;
+      gap: 6px;
+      min-height: 44px;
+      padding: 9px 10px;
+      border-radius: 12px;
       background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
       color: #f5f5f7;
       text-decoration: none;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       text-align: center;
       transition: background 0.18s, transform 0.12s;
@@ -360,29 +332,25 @@
       cursor: default;
     }
     .country-status {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.42);
     }
-    .country-card.is-active .country-status {
-      color: #a9cf77;
+    .world-note {
+      text-align: center;
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 10px;
     }
 
     /* ── FRANCHISE ── */
-    .franchise-preview {
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-    }
     .franchise-actions {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      margin-bottom: 10px;
     }
     .btn-franchise-pdf {
       display: flex;
@@ -417,14 +385,6 @@
     .btn-franchise-pdf:active, .btn-franchise-email:active {
       transform: scale(0.97);
       opacity: 0.85;
-    }
-    .franchise-email-note {
-      display: block;
-      text-align: center;
-      margin-top: 8px;
-      font-size: 11px;
-      color: rgba(255,255,255,0.4);
-      text-decoration: none;
     }
 
     body.modal-open { overflow: hidden; }
@@ -532,23 +492,14 @@
 
   <div class="section-label">Around the World</div>
 
-  <div class="glass-card">
-    <div class="glass-card-title">MATCHA TIMES Around the World</div>
-    <div class="glass-card-sub">Discover MATCHA TIMES around the world.</div>
-    <div class="world-grid" id="world-grid"></div>
-  </div>
+  <div class="world-grid" id="world-grid"></div>
+  <div class="world-note">More MATCHA TIMES countries coming soon.</div>
 
   <div class="section-label">Business</div>
 
-  <div class="glass-card">
-    <div class="glass-card-title">Interested in Franchise Opportunities?</div>
-    <div class="glass-card-sub">Discover the MATCHA TIMES Master Franchise opportunity.</div>
-    <img class="franchise-preview" src="assets/franchise-preview.png" alt="MATCHA TIMES Master Franchise">
-    <div class="franchise-actions">
-      <a class="btn-franchise-pdf" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
-      <a class="btn-franchise-email" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
-    </div>
-    <a class="franchise-email-note" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">info@matcha-times.com</a>
+  <div class="franchise-actions">
+    <a class="btn-franchise-pdf" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
+    <a class="btn-franchise-email" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
   </div>
 
   <div class="footer">© 2026 Matcha Times Japan</div>
