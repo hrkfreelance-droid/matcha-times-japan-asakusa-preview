@@ -22,11 +22,12 @@
     /* Background image with color overlay for brightness/readability balance */
     .bg {
       position: fixed;
-      inset: 0;
+      top: -20px; left: 0; right: 0; bottom: -20px;
       z-index: 0;
-      background: 
+      background:
         linear-gradient(rgba(26, 39, 17, 0.14), rgba(0, 0, 0, 0.32)),
         url('assets/matcha-japan-background.png') center/cover no-repeat;
+      will-change: transform;
     }
 
     /* Subtle texture overlay for premium feel */
@@ -184,10 +185,16 @@
       border-radius: 18px;
       padding: 15px 16px 16px;
       margin-bottom: 10px;
-      transition: background 0.18s;
+      transition: background 0.18s, transform 0.22s cubic-bezier(0.22,1,0.36,1), border-color 0.22s;
     }
     .store-card:active {
       background: rgba(255, 255, 255, 0.10);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .store-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255,255,255,0.18);
+      }
     }
     .store-header {
       display: flex;
@@ -208,9 +215,12 @@
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      transition: transform 0.12s;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
     }
-    .store-ig:active { transform: scale(0.92); }
+    .store-ig:active { transform: scale(0.96); }
+    @media (hover: hover) and (pointer: fine) {
+      .store-ig:hover { transform: scale(1.04); }
+    }
     .store-ig img { width: 30px; height: 30px; display: block; }
     .store-hours {
       font-size: 12px;
@@ -242,9 +252,26 @@
       font-weight: 600;
       text-align: center;
       cursor: pointer;
-      transition: opacity 0.12s, transform 0.12s;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
     }
-    .store-link:active { transform: scale(0.97); opacity: 0.85; }
+    .store-link:active { transform: scale(0.985); }
+    @media (hover: hover) and (pointer: fine) {
+      .store-link:hover { transform: translateY(-1px); }
+    }
+    .btn-menu {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-menu-chevron {
+      display: inline-block;
+      font-size: 11px;
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .btn-menu[aria-expanded="true"] .btn-menu-chevron {
+      transform: rotate(180deg);
+    }
     .btn {
       flex: 1;
       display: inline-flex;
@@ -300,6 +327,32 @@
       object-fit: contain;
     }
 
+    /* ── WORLD HEADING ── */
+    .world-heading {
+      text-align: center;
+      margin-bottom: 14px;
+      padding: 0 4px;
+    }
+    .world-heading-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 2px;
+    }
+    .world-heading-title {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #f5f5f7;
+    }
+    .world-heading-sub {
+      margin-top: 6px;
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.55);
+    }
+
     /* ── WORLD GRID ── */
     .world-grid {
       display: grid;
@@ -310,39 +363,59 @@
     .country-card {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      min-height: 44px;
-      padding: 9px 10px;
+      gap: 9px;
+      min-height: 40px;
+      padding: 7px 10px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
       color: #f5f5f7;
       text-decoration: none;
+      transition: background 0.18s, border-color 0.18s, transform 0.18s cubic-bezier(0.22,1,0.36,1);
+    }
+    a.country-card:active { transform: scale(0.985); background: rgba(255,255,255,0.11); }
+    @media (hover: hover) and (pointer: fine) {
+      a.country-card:hover { transform: translateY(-1px); background: rgba(255,255,255,0.1); }
+    }
+    .country-card.is-coming-soon {
+      background: rgba(255,255,255,0.035);
+      border: 1px dashed rgba(255,255,255,0.16);
+      cursor: default;
+    }
+    .country-flag {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .country-card.is-coming-soon .country-flag {
+      opacity: 0.72;
+    }
+    .country-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+    .country-name {
       font-size: 13px;
       font-weight: 600;
-      text-align: center;
-      transition: background 0.18s, transform 0.12s;
+      color: #f5f5f7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    a.country-card:active { transform: scale(0.96); background: rgba(255,255,255,0.16); }
-    .country-card.is-coming-soon {
-      background: rgba(255,255,255,0.045);
-      border: 1px dashed rgba(255,255,255,0.18);
-      color: rgba(255,255,255,0.68);
-      cursor: default;
+    .country-card.is-coming-soon .country-name {
+      color: rgba(255,255,255,0.82);
     }
     .country-status {
       font-size: 9px;
       font-weight: 500;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.42);
-    }
-    .world-note {
-      text-align: center;
-      font-size: 11.5px;
       color: rgba(255,255,255,0.45);
-      margin-bottom: 10px;
     }
 
     /* ── FRANCHISE ── */
@@ -366,6 +439,7 @@
       font-size: 13.5px;
       font-weight: 600;
       text-align: center;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
     }
     .btn-franchise-email {
       display: flex;
@@ -381,25 +455,81 @@
       font-size: 13.5px;
       font-weight: 600;
       text-align: center;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
     }
     .btn-franchise-pdf:active, .btn-franchise-email:active {
-      transform: scale(0.97);
-      opacity: 0.85;
+      transform: scale(0.985);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .btn-franchise-pdf:hover, .btn-franchise-email:hover { transform: translateY(-1px); }
+    }
+
+    /* ── MENU DRAWER ── */
+    .menu-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .menu-drawer.is-open { grid-template-rows: 1fr; }
+    .menu-drawer-track { overflow: hidden; min-height: 0; }
+    .menu-drawer-shell {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 10px;
+      margin-bottom: 10px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(-8px);
+      filter: blur(4px);
+      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1), filter 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .menu-drawer.is-open .menu-drawer-shell {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+    .menu-drawer-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 1;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(28,43,22,0.08);
+      color: #1c2b16;
+      font-size: 17px;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1), background 0.18s;
+    }
+    .menu-drawer-close:active { transform: scale(0.9); }
+    @media (hover: hover) and (pointer: fine) {
+      .menu-drawer-close:hover { background: rgba(28,43,22,0.14); }
     }
 
     /* ── MENU (in-page) ── */
     .menu-card {
       background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
       color: #1c2b16;
-      border-radius: 18px;
+      border-radius: 14px;
       padding: 28px 20px 26px;
-      margin-bottom: 10px;
       font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
     }
     .menu-card-header {
       text-align: center;
       margin-bottom: 22px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      transition-delay: 0.05s;
     }
+    .menu-drawer.is-open .menu-card-header { opacity: 1; transform: none; }
     .menu-title {
       font-size: 26px;
       font-weight: 600;
@@ -438,17 +568,17 @@
       padding: 16px 0;
       border-top: 1px solid rgba(28,43,22,0.14);
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+      transform: translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1);
     }
     .menu-cat:first-child { border-top: 0; padding-top: 0; }
-    .menu-card.is-visible .menu-cat { opacity: 1; transform: none; }
-    .menu-card.is-visible .menu-cat:nth-child(1) { transition-delay: 0s; }
-    .menu-card.is-visible .menu-cat:nth-child(2) { transition-delay: 0.1s; }
-    .menu-card.is-visible .menu-cat:nth-child(3) { transition-delay: 0.2s; }
-    .menu-card.is-visible .menu-cat:nth-child(4) { transition-delay: 0.3s; }
-    .menu-card.is-visible .menu-cat:nth-child(5) { transition-delay: 0.4s; }
-    .menu-card.is-visible .menu-cat:nth-child(6) { transition-delay: 0.5s; }
+    .menu-drawer.is-open .menu-cat { opacity: 1; transform: none; }
+    .menu-drawer.is-open .menu-cat:nth-child(1) { transition-delay: 0.15s; }
+    .menu-drawer.is-open .menu-cat:nth-child(2) { transition-delay: 0.22s; }
+    .menu-drawer.is-open .menu-cat:nth-child(3) { transition-delay: 0.29s; }
+    .menu-drawer.is-open .menu-cat:nth-child(4) { transition-delay: 0.36s; }
+    .menu-drawer.is-open .menu-cat:nth-child(5) { transition-delay: 0.43s; }
+    .menu-drawer.is-open .menu-cat:nth-child(6) { transition-delay: 0.5s; }
     .menu-cat-heading {
       font-size: 18px;
       font-weight: 600;
@@ -503,15 +633,17 @@
       margin-top: 20px;
       padding-top: 18px;
       border-top: 1px solid rgba(28,43,22,0.14);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1);
+      transition-delay: 0.56s;
     }
+    .menu-drawer.is-open .menu-footer { opacity: 1; transform: none; }
     .menu-footer-copy {
       font-size: 13px;
       font-style: italic;
       letter-spacing: 0.04em;
       color: rgba(28,43,22,0.68);
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .menu-cat { transition: none; opacity: 1; transform: none; }
     }
 
     body.modal-open { overflow: hidden; }
@@ -577,6 +709,49 @@
       margin-top: 30px;
     }
     .cls-1 { fill: #fff; }
+
+    /* ── SCROLL REVEAL SYSTEM ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(5px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.7s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.is-visible { opacity: 1; transform: none; filter: none; }
+    .reveal-card { transform: translateY(20px); filter: blur(6px); transition-duration: 0.75s; }
+    .reveal-scale { transform: scale(0.975); filter: none; }
+    .reveal-scale.is-visible { transform: scale(1); }
+    .reveal-d1 { transition-delay: 0.09s; }
+    .reveal-d2 { transition-delay: 0.18s; }
+
+    /* ── WORLD GRID STAGGER (index-driven, set inline per card) ── */
+    .world-grid .country-card {
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(5px);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1), filter 0.7s cubic-bezier(0.22,1,0.36,1), background 0.18s, border-color 0.18s;
+    }
+    .world-grid.is-visible .country-card { opacity: 1; transform: none; filter: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-card, .reveal-scale,
+      .world-grid .country-card,
+      .menu-cat, .menu-card-header, .menu-footer {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+      .menu-drawer { transition: none !important; }
+      .menu-drawer-shell {
+        transition: none !important;
+        transform: none !important;
+        filter: none !important;
+      }
+      .menu-drawer:not(.is-open) .menu-drawer-shell { opacity: 0 !important; }
+      .menu-drawer.is-open .menu-drawer-shell { opacity: 1 !important; }
+      .bg { transition: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -595,9 +770,9 @@
   <div class="pill"><span class="pill-dot"></span>Japan</div>
   </div>
 
-  <div class="section-label">Tokyo</div>
+  <div class="section-label reveal">Tokyo</div>
 
-  <div class="store-card">
+  <div class="store-card reveal reveal-card">
     <div class="store-header">
       <span class="store-name">MATCHA TIMES Asakusa</span>
       <a class="store-ig" href="https://www.instagram.com/matchatimes.jp/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
@@ -609,7 +784,7 @@
     <div class="store-links">
       <a class="store-link" href="tel:+818026455197">📞 Call</a>
       <a class="store-link" href="https://www.google.com/maps?cid=15563342826355309481" target="_blank" rel="noopener noreferrer">📍 Location</a>
-      <button class="store-link btn-menu" type="button" aria-haspopup="dialog" aria-controls="menu-modal">🍵 Menu</button>
+      <button class="store-link btn-menu" type="button" aria-expanded="false" aria-controls="menu-panel">🍵 <span>Menu</span><span class="btn-menu-chevron" aria-hidden="true">⌄</span></button>
       <a class="store-link btn-delivery" href="https://me.nu/s153595/fenwltj" target="_blank" rel="noopener noreferrer" aria-label="Order MATCHA TIMES Asakusa on menu delivery">
         <img src="assets/menu-logo-official.png" alt="menu">
         <span>Delivery</span>
@@ -617,9 +792,11 @@
     </div>
   </div>
 
-  <div class="section-label">Menu</div>
-
-  <div class="menu-card" id="menu-card">
+  <div class="menu-drawer" id="menu-drawer">
+    <div class="menu-drawer-track">
+      <div class="menu-drawer-shell" id="menu-panel" role="region" aria-label="MATCHA TIMES Menu" aria-hidden="true">
+        <button class="menu-drawer-close" type="button" aria-label="Close menu" tabindex="-1">×</button>
+        <div class="menu-card" id="menu-card">
     <div class="menu-card-header">
       <div class="menu-title">MATCHA TIMES</div>
       <div class="menu-subtitle">MENU</div>
@@ -696,41 +873,41 @@
     <div class="menu-footer">
       <div class="menu-footer-copy">Authentic Matcha. Playful Vibes. Friendly Prices.</div>
     </div>
-  </div>
-
-  <div class="section-label">Around the World</div>
-
-  <div class="world-grid" id="world-grid"></div>
-  <div class="world-note">More MATCHA TIMES countries coming soon.</div>
-
-  <div class="section-label">Business</div>
-
-  <div class="franchise-actions">
-    <a class="btn-franchise-pdf" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
-    <a class="btn-franchise-email" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
-  </div>
-
-  <div class="footer">© 2026 Matcha Times Japan</div>
-
-</div>
-<div class="modal" id="menu-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="MATCHA TIMES menu">
-  <div class="dialog">
-    <button class="close" type="button" aria-label="Close menu">×</button>
-    <div class="dialog-scroll">
-      <img src="assets/matcha-times-menu.png" alt="MATCHA TIMES menu">
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="world-heading reveal">
+    <div class="world-heading-eyebrow">MATCHA TIMES</div>
+    <div class="world-heading-title">Around the World</div>
+    <div class="world-heading-sub">MATCHA TIMES is expanding around the world.</div>
+  </div>
+
+  <div class="world-grid" id="world-grid"></div>
+
+  <div class="section-label reveal">Business</div>
+
+  <div class="franchise-actions">
+    <a class="btn-franchise-pdf reveal reveal-scale" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
+    <a class="btn-franchise-email reveal reveal-d1" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+  </div>
+
+  <div class="footer reveal">© 2026 Matcha Times Japan</div>
+
 </div>
 <script>
 (() => {
-  // Single source of truth for MATCHA TIMES country pages.
-  // To add a new country: add one entry here — name, url, and status.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Single source of truth for MATCHA TIMES country pages. ──
+  // To add a new country: add one entry here — name, flag, url, and status.
   // status: "active" | "coming-soon" | "under-construction"
   const countries = [
-    { name: "Cambodia",  url: "https://machatimescambodia.netlify.app/", status: "active" },
-    { name: "Thailand",  url: "https://matcha-times-thailand.netlify.app/", status: "active" },
-    { name: "Indonesia", url: null, status: "coming-soon" },
-    { name: "Pakistan",  url: null, status: "coming-soon" }
+    { name: "Cambodia",  flag: "assets/flags/cambodia.svg",  url: "https://machatimescambodia.netlify.app/", status: "active" },
+    { name: "Thailand",  flag: "assets/flags/thailand.svg",  url: "https://matcha-times-thailand.netlify.app/", status: "active" },
+    { name: "Indonesia", flag: "assets/flags/indonesia.svg", url: null, status: "coming-soon" },
+    { name: "Pakistan",  flag: "assets/flags/pakistan.svg",  url: null, status: "coming-soon" }
   ];
 
   const statusLabel = {
@@ -740,7 +917,8 @@
   };
 
   const grid = document.querySelector('#world-grid');
-  countries.forEach(country => {
+  const stagger = 90;
+  countries.forEach((country, index) => {
     const label = statusLabel[country.status];
     const isActive = country.status === 'active' && country.url;
     const el = document.createElement(isActive ? 'a' : 'div');
@@ -752,59 +930,115 @@
     } else {
       el.setAttribute('aria-disabled', 'true');
     }
-    el.innerHTML = `<span>${country.name}</span>` + (label ? `<span class="country-status">${label}</span>` : '');
+    if (!reduceMotion) el.style.transitionDelay = (index * stagger) + 'ms';
+    el.innerHTML = `<img class="country-flag" src="${country.flag}" alt="">` +
+      `<span class="country-text"><span class="country-name">${country.name}</span>` +
+      (label ? `<span class="country-status">${label}</span>` : '') +
+      `</span>`;
     grid.appendChild(el);
   });
+
+  if (reduceMotion) {
+    grid.classList.add('is-visible');
+  } else {
+    const worldObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          grid.classList.add('is-visible');
+          worldObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+    worldObserver.observe(grid);
+  }
 })();
 </script>
 <script>
 (() => {
-  const menuCard = document.querySelector('#menu-card');
-  if (!menuCard) return;
+  // ── Generic scroll reveal for standalone elements (.reveal) ──
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) {
-    menuCard.classList.add('is-visible');
+  const targets = document.querySelectorAll('.reveal');
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('is-visible'));
     return;
   }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        menuCard.classList.add('is-visible');
+        entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
-  observer.observe(menuCard);
+  }, { threshold: 0.12, rootMargin: '0px 0px -5% 0px' });
+  targets.forEach(el => observer.observe(el));
 })();
 </script>
 <script>
 (() => {
+  // ── Very subtle background parallax (transform only, rAF-throttled) ──
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bg = document.querySelector('.bg');
+  if (reduceMotion || !bg) return;
+  let ticking = false;
+  const update = () => {
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+    const shift = Math.min(15, y * 0.04);
+    bg.style.transform = `translateY(${-shift}px)`;
+    ticking = false;
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+</script>
+<script>
+(() => {
+  // ── Menu drawer: opens/closes in place below the Asakusa card ──
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const trigger = document.querySelector('.btn-menu');
-  const modal = document.querySelector('#menu-modal');
-  const dialog = modal.querySelector('.dialog');
-  const close = modal.querySelector('.close');
-  let lastFocus;
-  const open = () => {
-    lastFocus = document.activeElement;
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('modal-open');
-    close.focus();
+  const drawer = document.querySelector('#menu-drawer');
+  const panel = document.querySelector('#menu-panel');
+  const closeBtn = document.querySelector('.menu-drawer-close');
+  if (!trigger || !drawer || !panel) return;
+
+  let isOpen = false;
+
+  const setOpen = (open) => {
+    isOpen = open;
+    drawer.classList.toggle('is-open', open);
+    trigger.setAttribute('aria-expanded', String(open));
+    panel.setAttribute('aria-hidden', String(!open));
+    closeBtn.tabIndex = open ? 0 : -1;
+
+    if (open) {
+      const reveal = () => {
+        const rect = trigger.getBoundingClientRect();
+        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        if (!isVisible) {
+          panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+        }
+      };
+      if (reduceMotion) {
+        reveal();
+      } else {
+        setTimeout(reveal, 120);
+      }
+    }
   };
-  const hide = () => {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-    if (lastFocus) lastFocus.focus();
-  };
-  trigger.addEventListener('click', open);
-  close.addEventListener('click', hide);
-  modal.addEventListener('click', event => { if (event.target === modal) hide(); });
-  dialog.addEventListener('click', event => event.stopPropagation());
-  document.addEventListener('keydown', event => {
-    if (!modal.classList.contains('is-open')) return;
-    if (event.key === 'Escape') hide();
-    if (event.key === 'Tab') { event.preventDefault(); close.focus(); }
+
+  trigger.addEventListener('click', () => setOpen(!isOpen));
+  closeBtn.addEventListener('click', () => {
+    setOpen(false);
+    trigger.focus();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && isOpen) {
+      setOpen(false);
+      trigger.focus();
+    }
   });
 })();
 </script>
