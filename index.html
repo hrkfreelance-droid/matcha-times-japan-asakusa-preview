@@ -874,6 +874,143 @@
       color: rgba(28,43,22,0.68);
     }
 
+    /* ── GALLERY GRID ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+      padding: 8px 0;
+    }
+    @media (min-width: 500px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+      }
+    }
+    @media (min-width: 768px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 12px;
+      }
+    }
+    @media (min-width: 1024px) {
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 14px;
+      }
+    }
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .gallery-item:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) {
+      .gallery-item:hover { transform: scale(1.02); }
+    }
+    .gallery-item img, .gallery-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-item .play-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      font-size: 32px;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .gallery-item video ~ .play-icon { opacity: 1; }
+    .gallery-item:hover .play-icon { opacity: 1; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.92);
+      padding: 16px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .lightbox-img {
+      max-width: 92vw;
+      max-height: 88dvh;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+    .lightbox-caption {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      text-align: center;
+      max-width: 90vw;
+    }
+    .lightbox-close, .lightbox-prev, .lightbox-next {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover {
+      background: rgba(255,255,255,0.18);
+    }
+    .lightbox-close { top: 16px; right: 16px; }
+    .lightbox-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+    .lightbox-next { right: 16px; top: 50%; transform: translateY(-50%); }
+    @media (max-width: 640px) {
+      .lightbox-prev, .lightbox-next { display: none; }
+    }
+
+    .franchise-back-btn {
+      position: absolute;
+      top: calc(16px + env(safe-area-inset-top, 0px));
+      left: 16px;
+      z-index: 3;
+      background: transparent;
+      border: 0;
+      color: #1c2b16;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 0;
+      transition: opacity 0.2s;
+    }
+    .franchise-back-btn:hover { opacity: 0.7; }
+
     body.modal-open { overflow: hidden; }
     .modal {
       position: fixed;
@@ -1045,7 +1182,7 @@
       <div class="franchise-modal-sticky">
         <div class="franchise-modal-title">MATCHA TIMES Master Franchise<em>20 Benefits</em></div>
       </div>
-      <div class="franchise-modal-body">
+      <div class="franchise-modal-body" id="franchise-guide-view">
         <div class="franchise-intro-sub">拡張性の高いグローバル抹茶フランチャイズのご提案</div>
         <img class="franchise-cover-img" src="assets/franchise/franchise-cover-drinks.webp" alt="MATCHA TIMES matcha drink lineup">
 
@@ -1300,11 +1437,41 @@
     <p class="join-copy">MATCHA TIMES は本物の日本抹茶文化を世界へ広げるグローバルライフスタイルブランドとして、各国の Master Franchise Partner と共に成長していきます。</p>
   </div>
 
-        <div class="franchise-secondary-actions">
-          <a class="btn-franchise-pdf reveal" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Original PDF</a>
+        <div class="franchise-secondary-actions" id="franchise-cta-buttons">
+          <a class="btn-franchise-pdf reveal" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 Download Franchise PDF</a>
+          <button class="btn-franchise-pdf reveal" type="button" id="photo-library-trigger">📸 Franchise Photo Library</button>
+          <button class="btn-franchise-pdf reveal" type="button" id="store-concepts-trigger">🏗 Franchise Store Concepts</button>
+        </div>
+      </div>
+
+      <div class="franchise-photo-view" id="franchise-photo-view" style="display:none;">
+        <div class="franchise-modal-sticky">
+          <button class="franchise-back-btn" id="photo-back-btn" type="button" aria-label="Back to Franchise Guide">← Back</button>
+          <div class="franchise-modal-title">Franchise<em>Photo Library</em></div>
+        </div>
+        <div class="franchise-modal-body">
+          <div id="photo-gallery" class="gallery-grid"></div>
+        </div>
+      </div>
+
+      <div class="franchise-concepts-view" id="franchise-concepts-view" style="display:none;">
+        <div class="franchise-modal-sticky">
+          <button class="franchise-back-btn" id="concepts-back-btn" type="button" aria-label="Back to Franchise Guide">← Back</button>
+          <div class="franchise-modal-title">Franchise<em>Store Concepts</em></div>
+        </div>
+        <div class="franchise-modal-body">
+          <div id="concepts-gallery" class="gallery-grid"></div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="lightbox" class="lightbox" style="display:none;">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">×</button>
+    <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous image">‹</button>
+    <button class="lightbox-next" id="lightbox-next" aria-label="Next image">›</button>
+    <img id="lightbox-img" src="" alt="" class="lightbox-img">
+    <div id="lightbox-caption" class="lightbox-caption"></div>
   </div>
 </div>
 
@@ -1575,6 +1742,213 @@
 
   createOverlayModal({ triggerSelector: '.btn-menu', overlaySelector: '#menu-overlay', panelSelector: '#menu-panel' });
   createOverlayModal({ triggerSelector: '#franchise-trigger', overlaySelector: '#franchise-overlay', panelSelector: '#franchise-panel' });
+})();
+</script>
+<script>
+(() => {
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Gallery data (dynamic file list generation) ──
+  function getGalleryFiles(folderPath) {
+    return fetch('data:application/json,' + JSON.stringify({
+      photoLibrary: [
+        "1B21B130-B932-49FD-A61A-0DFA2C7A0F31.MP4",
+        "CD36CB7F-4B9A-41A5-AAF0-EE68482F0433.JPG",
+        "IMG_0057.JPG", "IMG_0415.PNG", "IMG_0521.JPG", "IMG_1788.JPG",
+        "IMG_1976.JPG", "IMG_2148.JPG", "IMG_2895.JPG", "IMG_3243.JPG",
+        "IMG_3896.JPG", "IMG_3917.JPG", "IMG_4362.JPG", "IMG_4493.MP4",
+        "IMG_4680.JPG", "IMG_5749.PNG"
+      ]
+    })).catch(() => ({ photoLibrary: [] }));
+  }
+
+  // ── Fisher-Yates shuffle ──
+  function shuffle(arr) {
+    const result = [...arr];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+
+  // ── Gallery state ──
+  let photoLibraryFiles = [
+    "1B21B130-B932-49FD-A61A-0DFA2C7A0F31.MP4",
+    "CD36CB7F-4B9A-41A5-AAF0-EE68482F0433.JPG",
+    "IMG_0057.JPG", "IMG_0415.PNG", "IMG_0521.JPG", "IMG_1788.JPG",
+    "IMG_1976.JPG", "IMG_2148.JPG", "IMG_2895.JPG", "IMG_3243.JPG",
+    "IMG_3896.JPG", "IMG_3917.JPG", "IMG_4362.JPG", "IMG_4493.MP4",
+    "IMG_4680.JPG", "IMG_5749.PNG"
+  ];
+
+  let storeConcepts = [
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_25_53.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_26_15.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_26_18.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_26_21.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_26_25.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_26_32.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_26_35.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_32_03.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_33_36.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_52_33.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_54_15.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_55_30.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_56_32.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 15_58_38.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 17_18_47.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 17_20_58.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 17_25_16.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 17_28_56.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 17_28_56(1).png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_28_48.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_34_38.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_35_45.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_37_25.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_38_41.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_39_15.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_42_07.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_44_37.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_47_10.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_50_10.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 18_50_38.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_17_26.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_18_42.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_20_35.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_24_43.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_28_39.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_29_14.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_30_18.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_31_34.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_32_25.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_34_03.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_35_35.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_36_49.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_37_42.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_38_42.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_39_34.png",
+    "assets/store-concepts/ChatGPT Image 2026年7月23日 19_46_59.png"
+  ];
+
+  let currentView = 'guide';
+  let currentGallery = null;
+  let lightboxCurrentIndex = 0;
+  let guideScrollPosition = 0;
+
+  // ── Render gallery ──
+  function renderGallery(files, containerId, galleryName) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const shuffled = shuffle(files);
+    container.innerHTML = shuffled.map((file, idx) => {
+      const ext = file.split('.').pop().toLowerCase();
+      const isVideo = ['mp4', 'webm', 'mov'].includes(ext);
+      return `
+        <div class="gallery-item" data-index="${idx}" data-file="${file}">
+          ${isVideo ? `<video src="${file}" preload="none"></video><div class="play-icon">▶</div>` : `<img src="${file}" alt="gallery" loading="lazy">`}
+        </div>
+      `;
+    }).join('');
+
+    container.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        lightboxCurrentIndex = parseInt(item.dataset.index);
+        currentGallery = shuffled;
+        openLightbox(shuffled, lightboxCurrentIndex);
+      });
+    });
+  }
+
+  // ── Lightbox ──
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+
+  function openLightbox(files, index) {
+    lightboxCurrentIndex = index;
+    currentGallery = files;
+    updateLightboxImage(files, index);
+    lightbox.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function updateLightboxImage(files, index) {
+    lightboxImg.src = files[index];
+    lightboxCaption.textContent = '';
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', () => {
+    lightbox.classList.remove('is-open');
+    document.body.style.overflow = '';
+  });
+
+  document.getElementById('lightbox-prev').addEventListener('click', () => {
+    if (currentGallery) {
+      lightboxCurrentIndex = (lightboxCurrentIndex - 1 + currentGallery.length) % currentGallery.length;
+      updateLightboxImage(currentGallery, lightboxCurrentIndex);
+    }
+  });
+
+  document.getElementById('lightbox-next').addEventListener('click', () => {
+    if (currentGallery) {
+      lightboxCurrentIndex = (lightboxCurrentIndex + 1) % currentGallery.length;
+      updateLightboxImage(currentGallery, lightboxCurrentIndex);
+    }
+  });
+
+  // ── Swipe gesture ──
+  let touchStartX = 0, touchEndX = 0;
+  lightbox.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, false);
+  lightbox.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].clientX;
+    if (touchStartX - touchEndX > 50) document.getElementById('lightbox-next').click();
+    if (touchEndX - touchStartX > 50) document.getElementById('lightbox-prev').click();
+  }, false);
+
+  // ── View switching ──
+  const guideView = document.getElementById('franchise-guide-view');
+  const photoView = document.getElementById('franchise-photo-view');
+  const conceptsView = document.getElementById('franchise-concepts-view');
+  const franchiseScroll = document.getElementById('franchise-scroll');
+
+  function switchView(view) {
+    if (view === 'guide') {
+      guideView.style.display = '';
+      photoView.style.display = 'none';
+      conceptsView.style.display = 'none';
+      if (franchiseScroll) franchiseScroll.scrollTop = guideScrollPosition;
+      currentView = 'guide';
+    } else if (view === 'photo') {
+      guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
+      guideView.style.display = 'none';
+      photoView.style.display = '';
+      conceptsView.style.display = 'none';
+      currentView = 'photo';
+      renderGallery(photoLibraryFiles, 'photo-gallery', 'Photo Library');
+    } else if (view === 'concepts') {
+      guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
+      guideView.style.display = 'none';
+      photoView.style.display = 'none';
+      conceptsView.style.display = '';
+      currentView = 'concepts';
+      renderGallery(storeConcepts, 'concepts-gallery', 'Store Concepts');
+    }
+  }
+
+  document.getElementById('photo-library-trigger').addEventListener('click', () => switchView('photo'));
+  document.getElementById('store-concepts-trigger').addEventListener('click', () => switchView('concepts'));
+  document.getElementById('photo-back-btn').addEventListener('click', () => switchView('guide'));
+  document.getElementById('concepts-back-btn').addEventListener('click', () => switchView('guide'));
+
+  // ── Keyboard navigation ──
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    if (e.key === 'ArrowLeft') document.getElementById('lightbox-prev').click();
+    if (e.key === 'ArrowRight') document.getElementById('lightbox-next').click();
+    if (e.key === 'Escape') document.getElementById('lightbox-close').click();
+  });
 })();
 </script>
 </body>
