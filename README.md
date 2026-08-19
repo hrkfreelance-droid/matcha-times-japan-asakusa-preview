@@ -7,7 +7,7 @@ MATCHA TIMES Japan Asakusaサイトの更新プレビュー（GitHub Pages）。
 Tokyo（Asakusa店舗情報）→ Around the World（世界展開）→ Business（フランチャイズ案内）の順に構成。
 
 このrepositoryはGitHub Pages確認専用です。**Netlify本番サイトとは接続されておらず、本番には一切反映されていません。**
-本番: https://matcha-times-japan-asakusa.netlify.app/（今回は未変更）
+本番: <https://matcha-times-japan-asakusa.netlify.app/> （今回は未変更）
 
 ## 構成
 
