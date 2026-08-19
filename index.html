@@ -7,7 +7,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/favicon.svg">
   <link rel="manifest" href="/site.webmanifest">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; -webkit-tap-highlight-color: transparent; }
 
@@ -387,6 +387,133 @@
       opacity: 0.85;
     }
 
+    /* ── MENU (in-page) ── */
+    .menu-card {
+      background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
+      color: #1c2b16;
+      border-radius: 18px;
+      padding: 28px 20px 26px;
+      margin-bottom: 10px;
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+    }
+    .menu-card-header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .menu-title {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #1c2b16;
+    }
+    .menu-subtitle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 6px;
+      font-size: 15px;
+      letter-spacing: 0.28em;
+      color: #1c2b16;
+    }
+    .menu-subtitle::before,
+    .menu-subtitle::after {
+      content: '';
+      height: 1px;
+      width: 26px;
+      background: rgba(28,43,22,0.35);
+    }
+    .menu-tagline {
+      margin-top: 8px;
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(28,43,22,0.62);
+      letter-spacing: 0.03em;
+    }
+    .menu-categories {
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-cat {
+      padding: 16px 0;
+      border-top: 1px solid rgba(28,43,22,0.14);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .menu-cat:first-child { border-top: 0; padding-top: 0; }
+    .menu-card.is-visible .menu-cat { opacity: 1; transform: none; }
+    .menu-card.is-visible .menu-cat:nth-child(1) { transition-delay: 0s; }
+    .menu-card.is-visible .menu-cat:nth-child(2) { transition-delay: 0.1s; }
+    .menu-card.is-visible .menu-cat:nth-child(3) { transition-delay: 0.2s; }
+    .menu-card.is-visible .menu-cat:nth-child(4) { transition-delay: 0.3s; }
+    .menu-card.is-visible .menu-cat:nth-child(5) { transition-delay: 0.4s; }
+    .menu-card.is-visible .menu-cat:nth-child(6) { transition-delay: 0.5s; }
+    .menu-cat-heading {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #1c2b16;
+      margin-bottom: 10px;
+    }
+    .menu-cat-num {
+      font-weight: 400;
+      margin-right: 4px;
+      color: rgba(28,43,22,0.55);
+    }
+    .menu-item + .menu-item { margin-top: 10px; }
+    .menu-item-name {
+      font-size: 15px;
+      color: #1c2b16;
+      margin-bottom: 3px;
+    }
+    .menu-item-prices {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 10px;
+      font-size: 14px;
+      color: rgba(28,43,22,0.85);
+    }
+    .menu-item-prices b { font-weight: 600; color: #7a6a2e; }
+    .menu-item-prices .mdiv {
+      color: rgba(28,43,22,0.28);
+    }
+    .menu-flavour-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      font-size: 14px;
+    }
+    .menu-flavour-row span { white-space: nowrap; }
+    .menu-flavour-row b { font-weight: 600; color: #7a6a2e; }
+    .menu-sweet-name {
+      font-size: 15px;
+      color: #1c2b16;
+      margin-bottom: 3px;
+    }
+    .menu-sweet-name b { color: #7a6a2e; }
+    .menu-sweet-desc {
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(28,43,22,0.6);
+    }
+    .menu-footer {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(28,43,22,0.14);
+    }
+    .menu-footer-copy {
+      font-size: 13px;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      color: rgba(28,43,22,0.68);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .menu-cat { transition: none; opacity: 1; transform: none; }
+    }
+
     body.modal-open { overflow: hidden; }
     .modal {
       position: fixed;
@@ -490,6 +617,87 @@
     </div>
   </div>
 
+  <div class="section-label">Menu</div>
+
+  <div class="menu-card" id="menu-card">
+    <div class="menu-card-header">
+      <div class="menu-title">MATCHA TIMES</div>
+      <div class="menu-subtitle">MENU</div>
+      <div class="menu-tagline">Create Your Perfect Matcha</div>
+    </div>
+
+    <div class="menu-categories">
+      <div class="menu-cat">
+        <div class="menu-cat-heading"><span class="menu-cat-num">1.</span>MATCHA</div>
+        <div class="menu-item">
+          <div class="menu-item-name">Zenraku — Classic Grade</div>
+          <div class="menu-item-prices"><span>Single <b>¥450</b></span><span class="mdiv">|</span><span>Double <b>¥530</b></span><span class="mdiv">|</span><span>Triple <b>¥620</b></span></div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-name">Yurane — Signature Grade</div>
+          <div class="menu-item-prices"><span>Single <b>¥530</b></span><span class="mdiv">|</span><span>Double <b>¥600</b></span><span class="mdiv">|</span><span>Triple <b>¥680</b></span></div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-name">Shoen — Reserve Grade</div>
+          <div class="menu-item-prices"><span>Single <b>¥810</b></span><span class="mdiv">|</span><span>Double <b>¥990</b></span><span class="mdiv">|</span><span>Triple <b>¥1080</b></span></div>
+        </div>
+      </div>
+
+      <div class="menu-cat">
+        <div class="menu-cat-heading"><span class="menu-cat-num">2.</span>HOJICHA</div>
+        <div class="menu-item">
+          <div class="menu-item-name">Shizuoka Roasted Green Tea</div>
+          <div class="menu-item-prices"><span>Single <b>¥450</b></span><span class="mdiv">|</span><span>Double <b>¥530</b></span><span class="mdiv">|</span><span>Triple <b>¥620</b></span></div>
+        </div>
+      </div>
+
+      <div class="menu-cat">
+        <div class="menu-cat-heading"><span class="menu-cat-num">3.</span>FLAVOURS</div>
+        <div class="menu-flavour-row">
+          <span>Pure <b>+¥0</b></span>
+          <span>Ginger <b>+¥80</b></span>
+          <span>Mango <b>+¥80</b></span>
+          <span>Coconut <b>+¥80</b></span>
+          <span>Cherry <b>+¥80</b></span>
+          <span>Grape <b>+¥80</b></span>
+          <span>Strawberry <b>+¥80</b></span>
+          <span>Melon <b>+¥80</b></span>
+          <span>Peach <b>+¥80</b></span>
+          <span>Yuzu <b>+¥100</b></span>
+        </div>
+      </div>
+
+      <div class="menu-cat">
+        <div class="menu-cat-heading"><span class="menu-cat-num">4.</span>BASE</div>
+        <div class="menu-flavour-row">
+          <span>Mineral Water <b>+¥0</b></span>
+          <span>Soda Water <b>+¥50</b></span>
+          <span>Hokkaido Milk <b>+¥50</b></span>
+          <span>Oat Milk <b>+¥100</b></span>
+        </div>
+      </div>
+
+      <div class="menu-cat">
+        <div class="menu-cat-heading"><span class="menu-cat-num">5.</span>TOPPINGS</div>
+        <div class="menu-flavour-row">
+          <span>Milk Cream Float <b>+¥100</b></span>
+          <span>Hokkaido Anko Red Bean <b>+¥150</b></span>
+          <span>Warabi Mochi <b>+¥150</b></span>
+        </div>
+      </div>
+
+      <div class="menu-cat">
+        <div class="menu-cat-heading"><span class="menu-cat-num">6.</span>SWEETS</div>
+        <div class="menu-sweet-name">10p DEME TAIYAKI <b>¥450</b></div>
+        <div class="menu-sweet-desc">Mini taiyaki filled with rich matcha custard.</div>
+      </div>
+    </div>
+
+    <div class="menu-footer">
+      <div class="menu-footer-copy">Authentic Matcha. Playful Vibes. Friendly Prices.</div>
+    </div>
+  </div>
+
   <div class="section-label">Around the World</div>
 
   <div class="world-grid" id="world-grid"></div>
@@ -547,6 +755,26 @@
     el.innerHTML = `<span>${country.name}</span>` + (label ? `<span class="country-status">${label}</span>` : '');
     grid.appendChild(el);
   });
+})();
+</script>
+<script>
+(() => {
+  const menuCard = document.querySelector('#menu-card');
+  if (!menuCard) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    menuCard.classList.add('is-visible');
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        menuCard.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  observer.observe(menuCard);
 })();
 </script>
 <script>
