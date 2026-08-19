@@ -464,60 +464,89 @@
       .btn-franchise-pdf:hover, .btn-franchise-email:hover { transform: translateY(-1px); }
     }
 
-    /* ── MENU DRAWER ── */
-    .menu-drawer {
-      display: grid;
-      grid-template-rows: 0fr;
-      transition: grid-template-rows 0.55s cubic-bezier(0.22,1,0.36,1);
-    }
-    .menu-drawer.is-open { grid-template-rows: 1fr; }
-    .menu-drawer-track { overflow: hidden; min-height: 0; }
-    .menu-drawer-shell {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 18px;
-      padding: 10px;
-      margin-bottom: 10px;
-      position: relative;
+    /* ── MENU FULLSCREEN MODAL ── */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       opacity: 0;
-      transform: translateY(-8px);
-      filter: blur(4px);
-      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1), filter 0.55s cubic-bezier(0.22,1,0.36,1);
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
     }
-    .menu-drawer.is-open .menu-drawer-shell {
+    .menu-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .menu-panel {
+      position: relative;
+      width: calc(100% - 24px);
+      max-width: 700px;
+      height: calc(100dvh - 24px);
+      max-height: calc(100dvh - 24px);
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
+      opacity: 0;
+      transform: translateY(28px) scale(0.94);
+      filter: blur(6px);
+      transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1), filter 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    .menu-overlay.is-open .menu-panel {
       opacity: 1;
       transform: none;
       filter: none;
     }
+    .menu-overlay.is-closing .menu-panel {
+      opacity: 0;
+      transform: translateY(15px) scale(0.97);
+    }
+    .menu-overlay.is-closing {
+      opacity: 0;
+    }
+    .menu-panel-scroll {
+      height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-top: max(env(safe-area-inset-top, 0px), 0px);
+      padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
+    }
     .menu-drawer-close {
       position: absolute;
-      top: 18px;
-      right: 18px;
+      top: calc(14px + env(safe-area-inset-top, 0px));
+      right: 14px;
       z-index: 1;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 0;
       border-radius: 50%;
-      background: rgba(28,43,22,0.08);
+      background: rgba(28,43,22,0.1);
       color: #1c2b16;
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1;
       cursor: pointer;
       transition: transform 0.18s cubic-bezier(0.22,1,0.36,1), background 0.18s;
     }
     .menu-drawer-close:active { transform: scale(0.9); }
     @media (hover: hover) and (pointer: fine) {
-      .menu-drawer-close:hover { background: rgba(28,43,22,0.14); }
+      .menu-drawer-close:hover { background: rgba(28,43,22,0.16); }
     }
 
-    /* ── MENU (in-page) ── */
+    /* ── MENU (content) ── */
     .menu-card {
-      background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
+      background: transparent;
       color: #1c2b16;
-      border-radius: 14px;
       padding: 28px 20px 26px;
       font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
     }
@@ -529,7 +558,7 @@
       transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1);
       transition-delay: 0.05s;
     }
-    .menu-drawer.is-open .menu-card-header { opacity: 1; transform: none; }
+    .menu-overlay.is-open .menu-card-header { opacity: 1; transform: none; }
     .menu-title {
       font-size: 26px;
       font-weight: 600;
@@ -572,13 +601,13 @@
       transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1);
     }
     .menu-cat:first-child { border-top: 0; padding-top: 0; }
-    .menu-drawer.is-open .menu-cat { opacity: 1; transform: none; }
-    .menu-drawer.is-open .menu-cat:nth-child(1) { transition-delay: 0.15s; }
-    .menu-drawer.is-open .menu-cat:nth-child(2) { transition-delay: 0.22s; }
-    .menu-drawer.is-open .menu-cat:nth-child(3) { transition-delay: 0.29s; }
-    .menu-drawer.is-open .menu-cat:nth-child(4) { transition-delay: 0.36s; }
-    .menu-drawer.is-open .menu-cat:nth-child(5) { transition-delay: 0.43s; }
-    .menu-drawer.is-open .menu-cat:nth-child(6) { transition-delay: 0.5s; }
+    .menu-overlay.is-open .menu-cat { opacity: 1; transform: none; }
+    .menu-overlay.is-open .menu-cat:nth-child(1) { transition-delay: 0.15s; }
+    .menu-overlay.is-open .menu-cat:nth-child(2) { transition-delay: 0.22s; }
+    .menu-overlay.is-open .menu-cat:nth-child(3) { transition-delay: 0.29s; }
+    .menu-overlay.is-open .menu-cat:nth-child(4) { transition-delay: 0.36s; }
+    .menu-overlay.is-open .menu-cat:nth-child(5) { transition-delay: 0.43s; }
+    .menu-overlay.is-open .menu-cat:nth-child(6) { transition-delay: 0.5s; }
     .menu-cat-heading {
       font-size: 18px;
       font-weight: 600;
@@ -638,7 +667,7 @@
       transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), transform 0.5s cubic-bezier(0.22,1,0.36,1);
       transition-delay: 0.56s;
     }
-    .menu-drawer.is-open .menu-footer { opacity: 1; transform: none; }
+    .menu-overlay.is-open .menu-footer { opacity: 1; transform: none; }
     .menu-footer-copy {
       font-size: 13px;
       font-style: italic;
@@ -742,14 +771,14 @@
         transform: none !important;
         filter: none !important;
       }
-      .menu-drawer { transition: none !important; }
-      .menu-drawer-shell {
+      .menu-overlay { transition: none !important; }
+      .menu-panel {
         transition: none !important;
         transform: none !important;
         filter: none !important;
       }
-      .menu-drawer:not(.is-open) .menu-drawer-shell { opacity: 0 !important; }
-      .menu-drawer.is-open .menu-drawer-shell { opacity: 1 !important; }
+      .menu-overlay:not(.is-open) .menu-panel { opacity: 0 !important; }
+      .menu-overlay.is-open .menu-panel { opacity: 1 !important; }
       .bg { transition: none !important; }
     }
   </style>
@@ -792,11 +821,29 @@
     </div>
   </div>
 
-  <div class="menu-drawer" id="menu-drawer">
-    <div class="menu-drawer-track">
-      <div class="menu-drawer-shell" id="menu-panel" role="region" aria-label="MATCHA TIMES Menu" aria-hidden="true">
-        <button class="menu-drawer-close" type="button" aria-label="Close menu" tabindex="-1">×</button>
-        <div class="menu-card" id="menu-card">
+  <div class="world-heading reveal">
+    <div class="world-heading-eyebrow">MATCHA TIMES</div>
+    <div class="world-heading-title">Around the World</div>
+  </div>
+
+  <div class="world-grid" id="world-grid"></div>
+
+  <div class="section-label reveal">Business</div>
+
+  <div class="franchise-actions">
+    <a class="btn-franchise-pdf reveal reveal-scale" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
+    <a class="btn-franchise-email reveal reveal-d1" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+  </div>
+
+  <div class="footer reveal">© 2026 Matcha Times Japan</div>
+
+</div>
+
+<div class="menu-overlay" id="menu-overlay">
+  <div class="menu-panel" id="menu-panel" role="dialog" aria-modal="true" aria-label="MATCHA TIMES Menu" aria-hidden="true">
+    <button class="menu-drawer-close" type="button" aria-label="Close menu" tabindex="-1">×</button>
+    <div class="menu-panel-scroll">
+      <div class="menu-card" id="menu-card">
     <div class="menu-card-header">
       <div class="menu-title">MATCHA TIMES</div>
       <div class="menu-subtitle">MENU</div>
@@ -873,28 +920,9 @@
     <div class="menu-footer">
       <div class="menu-footer-copy">Authentic Matcha. Playful Vibes. Friendly Prices.</div>
     </div>
-        </div>
       </div>
     </div>
   </div>
-
-  <div class="world-heading reveal">
-    <div class="world-heading-eyebrow">MATCHA TIMES</div>
-    <div class="world-heading-title">Around the World</div>
-    <div class="world-heading-sub">MATCHA TIMES is expanding around the world.</div>
-  </div>
-
-  <div class="world-grid" id="world-grid"></div>
-
-  <div class="section-label reveal">Business</div>
-
-  <div class="franchise-actions">
-    <a class="btn-franchise-pdf reveal reveal-scale" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Franchise Guide</a>
-    <a class="btn-franchise-email reveal reveal-d1" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
-  </div>
-
-  <div class="footer reveal">© 2026 Matcha Times Japan</div>
-
 </div>
 <script>
 (() => {
@@ -996,49 +1024,78 @@
 </script>
 <script>
 (() => {
-  // ── Menu drawer: opens/closes in place below the Asakusa card ──
+  // ── Menu: fullscreen modal overlay, does not affect page layout ──
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const trigger = document.querySelector('.btn-menu');
-  const drawer = document.querySelector('#menu-drawer');
+  const overlay = document.querySelector('#menu-overlay');
   const panel = document.querySelector('#menu-panel');
   const closeBtn = document.querySelector('.menu-drawer-close');
-  if (!trigger || !drawer || !panel) return;
+  if (!trigger || !overlay || !panel || !closeBtn) return;
 
   let isOpen = false;
+  let savedScrollY = 0;
+  let closeTimer = null;
 
-  const setOpen = (open) => {
-    isOpen = open;
-    drawer.classList.toggle('is-open', open);
-    trigger.setAttribute('aria-expanded', String(open));
-    panel.setAttribute('aria-hidden', String(!open));
-    closeBtn.tabIndex = open ? 0 : -1;
+  const lockScroll = () => {
+    savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${savedScrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  };
 
-    if (open) {
-      const reveal = () => {
-        const rect = trigger.getBoundingClientRect();
-        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
-        if (!isVisible) {
-          panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
-        }
-      };
-      if (reduceMotion) {
-        reveal();
-      } else {
-        setTimeout(reveal, 120);
-      }
+  const unlockScroll = () => {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, savedScrollY);
+  };
+
+  const open = () => {
+    if (isOpen) return;
+    isOpen = true;
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    overlay.classList.remove('is-closing');
+    lockScroll();
+    overlay.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+    panel.setAttribute('aria-hidden', 'false');
+    closeBtn.tabIndex = 0;
+    closeBtn.focus();
+  };
+
+  const close = () => {
+    if (!isOpen) return;
+    isOpen = false;
+    trigger.setAttribute('aria-expanded', 'false');
+    panel.setAttribute('aria-hidden', 'true');
+    closeBtn.tabIndex = -1;
+
+    const finish = () => {
+      overlay.classList.remove('is-open', 'is-closing');
+      unlockScroll();
+      trigger.focus();
+    };
+
+    if (reduceMotion) {
+      finish();
+    } else {
+      overlay.classList.add('is-closing');
+      overlay.classList.remove('is-open');
+      closeTimer = setTimeout(finish, 320);
     }
   };
 
-  trigger.addEventListener('click', () => setOpen(!isOpen));
-  closeBtn.addEventListener('click', () => {
-    setOpen(false);
-    trigger.focus();
+  trigger.addEventListener('click', () => (isOpen ? close() : open()));
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) close();
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && isOpen) {
-      setOpen(false);
-      trigger.focus();
-    }
+    if (event.key === 'Escape' && isOpen) close();
   });
 })();
 </script>
