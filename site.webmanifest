@@ -1,0 +1,14 @@
+{
+  "name": "Matcha Times Cambodia",
+  "short_name": "Matcha Times",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#1a2711",
+  "background_color": "#1a2711",
+  "display": "standalone"
+}
