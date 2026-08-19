@@ -575,12 +575,35 @@
     @media (min-width: 700px) {
       .benefit-list {
         grid-template-columns: 1fr 1fr;
-        width: 100vw;
-        max-width: 720px;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
       }
+    }
+
+    .franchise-modal-sticky {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
+      padding: 16px 44px 12px 16px;
+      text-align: center;
+      border-bottom: 1px solid rgba(28,43,22,0.1);
+    }
+    .franchise-modal-title {
+      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: #16281b;
+      line-height: 1.3;
+    }
+    .franchise-modal-title em {
+      font-style: normal;
+      color: #9a7a2e;
+      margin-left: 4px;
+    }
+    .franchise-modal-body {
+      padding: 18px 16px 26px;
+    }
+    .franchise-modal-body .franchise-intro-sub {
+      margin-bottom: 16px;
     }
 
     /* ── FRANCHISE JOIN CTA ── */
@@ -615,38 +638,6 @@
       text-align: left;
     }
     .join-copy + .join-copy { margin-top: 10px; }
-    .join-features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px 14px;
-      margin-top: 22px;
-    }
-    .join-feature {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      width: 84px;
-    }
-    .join-feature img {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .join-feature span {
-      font-size: 10.5px;
-      line-height: 1.35;
-      color: rgba(255,255,255,0.8);
-    }
-    .join-photo {
-      display: block;
-      max-width: 220px;
-      width: 68%;
-      height: auto;
-      margin: 20px auto 0;
-    }
     .franchise-secondary-actions {
       display: flex;
       flex-direction: column;
@@ -712,7 +703,7 @@
       position: absolute;
       top: calc(14px + env(safe-area-inset-top, 0px));
       right: 14px;
-      z-index: 1;
+      z-index: 3;
       width: 32px;
       height: 32px;
       display: flex;
@@ -1026,6 +1017,26 @@
     <img class="franchise-cover-img" src="assets/franchise/franchise-cover-drinks.webp" alt="MATCHA TIMES matcha drink lineup">
   </div>
 
+  <div class="franchise-secondary-actions reveal">
+    <button class="btn-franchise-pdf" type="button" id="franchise-trigger" aria-expanded="false" aria-controls="franchise-panel">📖 View Franchise Guide</button>
+    <a class="btn-franchise-email" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+  </div>
+
+  <div class="footer reveal">© 2026 Matcha Times Japan</div>
+
+</div>
+
+<div class="menu-overlay" id="franchise-overlay">
+  <div class="menu-panel" id="franchise-panel" role="dialog" aria-modal="true" aria-label="MATCHA TIMES Master Franchise Guide" aria-hidden="true">
+    <button class="menu-drawer-close" type="button" aria-label="Close franchise guide" tabindex="-1">×</button>
+    <div class="menu-panel-scroll" id="franchise-scroll">
+      <div class="franchise-modal-sticky">
+        <div class="franchise-modal-title">MATCHA TIMES Master Franchise <em>20 Benefits</em></div>
+      </div>
+      <div class="franchise-modal-body">
+        <div class="franchise-intro-sub">拡張性の高いグローバル抹茶フランチャイズのご提案</div>
+        <img class="franchise-cover-img" src="assets/franchise/franchise-cover-drinks.webp" alt="MATCHA TIMES matcha drink lineup">
+
   <div class="benefit-list">
 
     <div class="benefit-card reveal">
@@ -1269,43 +1280,21 @@
     </div>
 
   </div>
+
   <div class="join-section reveal reveal-card">
     <div class="join-title-en">JOIN THE FUTURE OF MATCHA</div>
     <div class="join-title-jp">抹茶ビジネスの未来へ</div>
     <p class="join-copy">MATCHA TIMES is a global lifestyle brand built to bring authentic Japanese matcha culture to the world, inviting Master Franchise Partners to lead its growth in their own countries.</p>
     <p class="join-copy">MATCHA TIMES は本物の日本抹茶文化を世界へ広げるグローバルライフスタイルブランドとして、各国の Master Franchise Partner と共に成長していきます。</p>
-    <div class="join-features">
-      <div class="join-feature">
-        <img src="assets/franchise/cta-authentic.webp" alt="">
-        <span>Authentic<br>Japanese Matcha</span>
-      </div>
-      <div class="join-feature">
-        <img src="assets/franchise/cta-simple.webp" alt="">
-        <span>Simple<br>Operations</span>
-      </div>
-      <div class="join-feature">
-        <img src="assets/franchise/cta-multiple.webp" alt="">
-        <span>Multiple<br>Revenue Streams</span>
-      </div>
-      <div class="join-feature">
-        <img src="assets/franchise/cta-scalable.webp" alt="">
-        <span>Scalable<br>Franchise Model</span>
-      </div>
-      <div class="join-feature">
-        <img src="assets/franchise/cta-exclusive.webp" alt="">
-        <span>Exclusive<br>Country Rights</span>
+  </div>
+
+        <div class="franchise-secondary-actions">
+          <a class="btn-franchise-pdf reveal" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Original PDF</a>
+          <a class="btn-franchise-email reveal reveal-d1" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+        </div>
       </div>
     </div>
-    <img class="join-photo" src="assets/franchise/franchise-ninja.webp" alt="MATCHA NINJA Tomoki">
   </div>
-
-  <div class="franchise-secondary-actions">
-    <a class="btn-franchise-email reveal" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
-    <a class="btn-franchise-pdf reveal reveal-d1" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 View Original PDF</a>
-  </div>
-
-  <div class="footer reveal">© 2026 Matcha Times Japan</div>
-
 </div>
 
 <div class="menu-overlay" id="menu-overlay">
@@ -1493,79 +1482,88 @@
 </script>
 <script>
 (() => {
-  // ── Menu: fullscreen modal overlay, does not affect page layout ──
+  // ── Shared fullscreen modal overlay: opens as an overlay, never
+  // shifts page layout. Used for both the Menu and Franchise Guide —
+  // same overlay/shell/close/animation/scroll-lock code, only the
+  // trigger/overlay/panel selectors differ per instance. ──
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const trigger = document.querySelector('.btn-menu');
-  const overlay = document.querySelector('#menu-overlay');
-  const panel = document.querySelector('#menu-panel');
-  const closeBtn = document.querySelector('.menu-drawer-close');
-  if (!trigger || !overlay || !panel || !closeBtn) return;
 
-  let isOpen = false;
-  let savedScrollY = 0;
-  let closeTimer = null;
+  function createOverlayModal({ triggerSelector, overlaySelector, panelSelector }) {
+    const trigger = document.querySelector(triggerSelector);
+    const overlay = document.querySelector(overlaySelector);
+    const panel = document.querySelector(panelSelector);
+    const closeBtn = overlay ? overlay.querySelector('.menu-drawer-close') : null;
+    if (!trigger || !overlay || !panel || !closeBtn) return;
 
-  const lockScroll = () => {
-    savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${savedScrollY}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
-  };
+    let isOpen = false;
+    let savedScrollY = 0;
+    let closeTimer = null;
 
-  const unlockScroll = () => {
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.width = '';
-    window.scrollTo(0, savedScrollY);
-  };
-
-  const open = () => {
-    if (isOpen) return;
-    isOpen = true;
-    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
-    overlay.classList.remove('is-closing');
-    lockScroll();
-    overlay.classList.add('is-open');
-    trigger.setAttribute('aria-expanded', 'true');
-    panel.setAttribute('aria-hidden', 'false');
-    closeBtn.tabIndex = 0;
-    closeBtn.focus();
-  };
-
-  const close = () => {
-    if (!isOpen) return;
-    isOpen = false;
-    trigger.setAttribute('aria-expanded', 'false');
-    panel.setAttribute('aria-hidden', 'true');
-    closeBtn.tabIndex = -1;
-
-    const finish = () => {
-      overlay.classList.remove('is-open', 'is-closing');
-      unlockScroll();
-      trigger.focus();
+    const lockScroll = () => {
+      savedScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${savedScrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
     };
 
-    if (reduceMotion) {
-      finish();
-    } else {
-      overlay.classList.add('is-closing');
-      overlay.classList.remove('is-open');
-      closeTimer = setTimeout(finish, 320);
-    }
-  };
+    const unlockScroll = () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, savedScrollY);
+    };
 
-  trigger.addEventListener('click', () => (isOpen ? close() : open()));
-  closeBtn.addEventListener('click', close);
-  overlay.addEventListener('click', (event) => {
-    if (event.target === overlay) close();
-  });
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && isOpen) close();
-  });
+    const open = () => {
+      if (isOpen) return;
+      isOpen = true;
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      overlay.classList.remove('is-closing');
+      lockScroll();
+      overlay.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+      panel.setAttribute('aria-hidden', 'false');
+      closeBtn.tabIndex = 0;
+      closeBtn.focus();
+    };
+
+    const close = () => {
+      if (!isOpen) return;
+      isOpen = false;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('aria-hidden', 'true');
+      closeBtn.tabIndex = -1;
+
+      const finish = () => {
+        overlay.classList.remove('is-open', 'is-closing');
+        unlockScroll();
+        trigger.focus();
+      };
+
+      if (reduceMotion) {
+        finish();
+      } else {
+        overlay.classList.add('is-closing');
+        overlay.classList.remove('is-open');
+        closeTimer = setTimeout(finish, 320);
+      }
+    };
+
+    trigger.addEventListener('click', () => (isOpen ? close() : open()));
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) close();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && isOpen) close();
+    });
+  }
+
+  createOverlayModal({ triggerSelector: '.btn-menu', overlaySelector: '#menu-overlay', panelSelector: '#menu-panel' });
+  createOverlayModal({ triggerSelector: '#franchise-trigger', overlaySelector: '#franchise-overlay', panelSelector: '#franchise-panel' });
 })();
 </script>
 </body>
