@@ -468,7 +468,29 @@
       appearance: none;
       transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
     }
-    .btn-franchise-pdf:active, .btn-franchise-email:active {
+    .btn-franchise-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 38px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 0;
+      background: rgba(255,255,255,0.08);
+      color: #f5f5f7;
+      text-decoration: none;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      transition: transform 0.18s cubic-bezier(0.22,1,0.36,1);
+    }
+    .btn-franchise-pdf:active, .btn-franchise-email:active, .btn-franchise-cta:active {
       transform: scale(0.985);
     }
     #franchise-panel .btn-franchise-pdf {
@@ -476,7 +498,7 @@
       color: #f8f4e9;
     }
     @media (hover: hover) and (pointer: fine) {
-      .btn-franchise-pdf:hover, .btn-franchise-email:hover { transform: translateY(-1px); }
+      .btn-franchise-pdf:hover, .btn-franchise-email:hover, .btn-franchise-cta:hover { transform: translateY(-1px); }
     }
 
     /* ── FRANCHISE GUIDE (PDF → Web) ── */
@@ -1191,8 +1213,7 @@
   <div class="section-label reveal">Franchise</div>
 
   <div class="franchise-secondary-actions reveal">
-    <button class="btn-franchise-pdf" type="button" id="franchise-trigger" aria-expanded="false" aria-controls="franchise-panel">📖 View Franchise Guide</button>
-    <a class="btn-franchise-email" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+    <button class="btn-franchise-cta" type="button" id="franchise-trigger" aria-expanded="false" aria-controls="franchise-panel">Interested in Franchise?</button>
   </div>
 
   <div class="footer reveal">© 2026 Matcha Times Japan</div>
@@ -1465,6 +1486,9 @@
           <a class="btn-franchise-pdf reveal" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 Download Franchise PDF</a>
           <button class="btn-franchise-pdf reveal" type="button" id="photo-library-trigger">📸 Franchise Photo Library</button>
           <button class="btn-franchise-pdf reveal" type="button" id="store-concepts-trigger">🏗 Franchise Store Concepts</button>
+        </div>
+        <div class="franchise-secondary-actions" id="franchise-email-cta">
+          <a class="btn-franchise-email reveal" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
         </div>
       </div>
 
@@ -1871,6 +1895,8 @@
   let currentGallery = null;
   let lightboxCurrentIndex = 0;
   let guideScrollPosition = 0;
+  let galleryScrollPosition = 0;
+  let lightboxOpenedFromView = 'guide';
 
   // ── Render gallery ──
   function renderGallery(files, containerId, galleryName) {
@@ -1892,6 +1918,8 @@
       item.addEventListener('click', (e) => {
         lightboxCurrentIndex = parseInt(item.dataset.index);
         currentGallery = shuffled;
+        galleryScrollPosition = container.parentElement ? container.parentElement.scrollTop : 0;
+        lightboxOpenedFromView = currentView;
         openLightbox(shuffled, lightboxCurrentIndex);
       });
     });
@@ -1941,10 +1969,31 @@
     lightboxCaption.textContent = '';
   }
 
-  document.getElementById('lightbox-close').addEventListener('click', () => {
+  function closeLightbox() {
     pauseCurrentMedia();
     lightbox.classList.remove('is-open');
     document.body.style.overflow = '';
+    // Restore to the view and scroll position where lightbox was opened
+    if (lightboxOpenedFromView === 'photo') {
+      currentView = 'photo';
+      setTimeout(() => { const container = document.getElementById('photo-gallery'); if (container && container.parentElement) container.parentElement.scrollTop = galleryScrollPosition; }, 0);
+    } else if (lightboxOpenedFromView === 'concepts') {
+      currentView = 'concepts';
+      setTimeout(() => { const container = document.getElementById('concepts-gallery'); if (container && container.parentElement) container.parentElement.scrollTop = galleryScrollPosition; }, 0);
+    }
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+
+  // Overlay tap to close
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Prevent close when clicking on media or controls
+  const lightboxMediaContainer = document.getElementById('lightbox-media-container');
+  [lightboxMediaContainer, document.getElementById('lightbox-prev'), document.getElementById('lightbox-next'), document.getElementById('lightbox-close')].forEach(el => {
+    if (el) el.addEventListener('click', (e) => e.stopPropagation());
   });
 
   document.getElementById('lightbox-prev').addEventListener('click', () => {
@@ -1990,6 +2039,7 @@
       conceptsView.style.display = 'none';
       currentView = 'photo';
       renderGallery(photoLibraryFiles, 'photo-gallery', 'Photo Library');
+      setTimeout(() => { const photoGal = document.getElementById('photo-gallery'); if (photoGal) photoGal.parentElement.scrollTop = 0; }, 0);
     } else if (view === 'concepts') {
       guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
@@ -1997,8 +2047,15 @@
       conceptsView.style.display = '';
       currentView = 'concepts';
       renderGallery(storeConcepts, 'concepts-gallery', 'Store Concepts');
+      setTimeout(() => { const conceptsGal = document.getElementById('concepts-gallery'); if (conceptsGal) conceptsGal.parentElement.scrollTop = 0; }, 0);
     }
   }
+
+  // ── Franchise Modal: Reset to guide on open ──
+  document.getElementById('franchise-trigger').addEventListener('click', () => {
+    guideScrollPosition = 0;
+    switchView('guide');
+  });
 
   document.getElementById('photo-library-trigger').addEventListener('click', () => switchView('photo'));
   document.getElementById('store-concepts-trigger').addEventListener('click', () => switchView('concepts'));
