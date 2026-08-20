@@ -1984,7 +1984,10 @@
       item.addEventListener('click', (e) => {
         lightboxCurrentIndex = parseInt(item.dataset.index);
         currentGallery = shuffled;
-        galleryScrollPosition = container.parentElement ? container.parentElement.scrollTop : 0;
+        // Guide/Photo/Concepts views all live inside the single #franchise-scroll
+        // container, not container.parentElement — that's what actually scrolls.
+        const scrollHost = document.getElementById('franchise-scroll');
+        galleryScrollPosition = scrollHost ? scrollHost.scrollTop : 0;
         lightboxOpenedFromView = currentView;
         openLightbox(shuffled, lightboxCurrentIndex);
       });
@@ -2039,17 +2042,13 @@
     pauseCurrentMedia();
     lightbox.classList.remove('is-open');
     document.body.style.overflow = '';
-    // Restore to the view and scroll position where lightbox was opened
-    if (lightboxOpenedFromView === 'photo') {
-      currentView = 'photo';
-      const container = document.getElementById('photo-gallery');
+    // Restore to the view and scroll position where lightbox was opened.
+    // Guide/Photo/Concepts all scroll inside the single #franchise-scroll host.
+    if (lightboxOpenedFromView === 'photo' || lightboxOpenedFromView === 'concepts') {
+      currentView = lightboxOpenedFromView;
+      const scrollHost = document.getElementById('franchise-scroll');
       const pos = galleryScrollPosition;
-      if (container && container.parentElement) afterLayoutSettles(() => { container.parentElement.scrollTop = pos; });
-    } else if (lightboxOpenedFromView === 'concepts') {
-      currentView = 'concepts';
-      const container = document.getElementById('concepts-gallery');
-      const pos = galleryScrollPosition;
-      if (container && container.parentElement) afterLayoutSettles(() => { container.parentElement.scrollTop = pos; });
+      if (scrollHost) afterLayoutSettles(() => { scrollHost.scrollTop = pos; });
     }
   }
 
@@ -2124,8 +2123,7 @@
       conceptsView.style.display = 'none';
       currentView = 'photo';
       renderGallery(photoLibraryFiles, 'photo-gallery', 'Photo Library');
-      const photoGal = document.getElementById('photo-gallery');
-      forceScrollTopZero(photoGal ? photoGal.parentElement : null);
+      forceScrollTopZero(franchiseScroll);
     } else if (view === 'concepts') {
       guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
@@ -2133,8 +2131,7 @@
       conceptsView.style.display = '';
       currentView = 'concepts';
       renderGallery(storeConcepts, 'concepts-gallery', 'Store Concepts');
-      const conceptsGal = document.getElementById('concepts-gallery');
-      forceScrollTopZero(conceptsGal ? conceptsGal.parentElement : null);
+      forceScrollTopZero(franchiseScroll);
     }
   }
 
