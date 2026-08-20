@@ -473,15 +473,15 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      min-height: 38px;
-      padding: 8px 10px;
+      min-height: 36px;
+      padding: 7px 10px;
       border-radius: 12px;
-      border: 0;
-      background: rgba(255,255,255,0.08);
-      color: #f5f5f7;
+      border: 1px solid rgba(248,244,233,0.2);
+      background: rgba(248,244,233,0.12);
+      color: rgba(248,244,233,0.9);
       text-decoration: none;
       font-family: inherit;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 500;
       text-align: center;
       cursor: pointer;
@@ -1563,7 +1563,7 @@
       <div class="franchise-photo-view" id="franchise-photo-view" style="display:none;">
         <div class="franchise-modal-sticky">
           <button class="franchise-back-btn" id="photo-back-btn" type="button" aria-label="Back to Franchise Guide">← Back</button>
-          <div class="franchise-modal-title">Franchise<em>Photo Library</em></div>
+          <div class="franchise-modal-title-simple">Franchise Photo Library</div>
         </div>
         <div class="franchise-modal-body">
           <div id="photo-gallery" class="gallery-grid"></div>
@@ -1573,7 +1573,7 @@
       <div class="franchise-concepts-view" id="franchise-concepts-view" style="display:none;">
         <div class="franchise-modal-sticky">
           <button class="franchise-back-btn" id="concepts-back-btn" type="button" aria-label="Back to Franchise Guide">← Back</button>
-          <div class="franchise-modal-title">Franchise<em>Store Concepts</em></div>
+          <div class="franchise-modal-title-simple">Franchise Store Concepts</div>
         </div>
         <div class="franchise-modal-body">
           <div id="concepts-gallery" class="gallery-grid"></div>
@@ -1866,6 +1866,7 @@
 <script>
 (() => {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ASSET_VERSION = '20260820-gallery-fix-1';
 
   // ── Gallery data (dynamic file list generation) ──
   function getGalleryFiles(folderPath) {
@@ -1977,6 +1978,11 @@
     return `${dir}-thumb/${baseName}.jpg`;
   }
 
+  function withAssetVersion(file) {
+    const separator = file.includes('?') ? '&' : '?';
+    return `${file}${separator}v=${encodeURIComponent(ASSET_VERSION)}`;
+  }
+
   // ── Masonry: set grid-row-end span based on actual thumbnail aspect ratio ──
   function applyMasonrySpan(item, mediaEl) {
     const grid = item.parentElement;
@@ -2002,9 +2008,11 @@
       const ext = file.split('.').pop().toLowerCase();
       const isVideo = ['mp4', 'webm', 'mov'].includes(ext);
       const thumbSrc = getThumbPath(file);
+      const loading = idx < 6 ? 'eager' : 'lazy';
+      const fetchPriority = idx < 4 ? ' fetchpriority="high"' : '';
       return `
         <div class="gallery-item" data-index="${idx}" data-file="${file}" data-video="${isVideo}">
-          <img src="${thumbSrc}" alt="gallery" loading="lazy" decoding="async">
+          <img src="${withAssetVersion(thumbSrc)}" alt="gallery" loading="${loading}" decoding="async"${fetchPriority}>
           ${isVideo ? `<div class="play-icon">▶</div>` : ''}
         </div>
       `;
@@ -2061,7 +2069,7 @@
     pauseCurrentMedia();
     const file = files[index];
     const isVideo = isVideoFile(file);
-    const versioned = `${file}?v=${ASSET_VERSION}`;
+    const versioned = withAssetVersion(file);
 
     if (isVideo) {
       lightboxImg.style.display = 'none';
@@ -2146,7 +2154,12 @@
 
   function forceScrollTopZero(scrollContainer) {
     if (!scrollContainer) return;
-    afterLayoutSettles(() => { scrollContainer.scrollTop = 0; });
+    scrollContainer.scrollTop = 0;
+    if (typeof scrollContainer.scrollTo === 'function') scrollContainer.scrollTo(0, 0);
+    afterLayoutSettles(() => {
+      scrollContainer.scrollTop = 0;
+      if (typeof scrollContainer.scrollTo === 'function') scrollContainer.scrollTo(0, 0);
+    });
   }
 
   function switchView(view) {
@@ -2157,7 +2170,7 @@
       currentView = 'guide';
       afterLayoutSettles(() => { if (franchiseScroll) franchiseScroll.scrollTop = guideScrollPosition; });
     } else if (view === 'photo') {
-      guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
+      if (guideView.style.display !== 'none') guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
       photoView.style.display = '';
       conceptsView.style.display = 'none';
@@ -2165,7 +2178,7 @@
       renderGallery(photoLibraryFiles, 'photo-gallery', 'Photo Library');
       forceScrollTopZero(franchiseScroll);
     } else if (view === 'concepts') {
-      guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
+      if (guideView.style.display !== 'none') guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
       photoView.style.display = 'none';
       conceptsView.style.display = '';
@@ -2178,6 +2191,16 @@
   // ── Franchise Modal: Reset to guide on open ──
   document.getElementById('franchise-trigger').addEventListener('click', () => {
     guideScrollPosition = 0;
+    galleryScrollPosition = 0;
+    currentGallery = null;
+    lightboxCurrentIndex = 0;
+    lightboxOpenedFromView = 'guide';
+    if (franchiseScroll) {
+      franchiseScroll.scrollTop = 0;
+      if (typeof franchiseScroll.scrollTo === 'function') franchiseScroll.scrollTo(0, 0);
+    }
+    document.getElementById('photo-gallery').innerHTML = '';
+    document.getElementById('concepts-gallery').innerHTML = '';
     switchView('guide');
   });
 
