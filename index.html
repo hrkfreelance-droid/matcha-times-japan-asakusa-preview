@@ -528,10 +528,12 @@
       color: #d9b866;
     }
     .franchise-intro-sub {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+      font-family: 'EB Garamond', Georgia, serif;
+      letter-spacing: 0.02em;
+      color: rgba(255,255,255,0.72);
       line-height: 1.6;
-      max-width: 320px;
+      max-width: 520px;
       margin: 0 auto;
     }
     .franchise-cover-img {
@@ -548,9 +550,9 @@
       margin-bottom: 16px;
     }
     .benefit-card {
-      background: linear-gradient(180deg, #f8f4e9 0%, #f2ecdb 100%);
-      border-radius: 16px;
-      padding: 18px 18px 20px;
+      background: transparent;
+      border-radius: 0;
+      padding: 18px 0 20px;
       color: #1c2b16;
     }
     .benefit-card-top {
@@ -580,18 +582,20 @@
       flex-shrink: 0;
     }
     .benefit-title-en {
-      font-family: 'EB Garamond', 'DM Sans', Georgia, serif;
-      font-size: 19px;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 21px;
       font-weight: 600;
-      line-height: 1.25;
+      line-height: 1.3;
       color: #16281b;
-      margin: 0 0 4px;
+      margin: 0 0 6px;
     }
     .benefit-title-jp {
-      font-size: 13px;
-      color: rgba(28,43,22,0.72);
-      letter-spacing: 0.02em;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 16px;
+      color: rgba(28,43,22,0.82);
+      letter-spacing: 0.01em;
       margin-bottom: 12px;
+      font-weight: 500;
     }
     .benefit-divider {
       height: 1px;
@@ -599,15 +603,19 @@
       margin-bottom: 12px;
     }
     .benefit-desc-en {
-      font-size: 13.5px;
-      line-height: 1.55;
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 14px;
+      line-height: 1.6;
       color: #2a3a24;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      font-weight: 400;
     }
     .benefit-desc-jp {
-      font-size: 12.5px;
-      line-height: 1.65;
-      color: rgba(28,43,22,0.65);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 13px;
+      line-height: 1.68;
+      color: rgba(28,43,22,0.72);
+      font-weight: 400;
     }
     @media (min-width: 700px) {
       .benefit-list {
@@ -683,6 +691,17 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
+    }
+    .franchise-gallery-buttons {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
+    .franchise-gallery-buttons .btn-franchise-pdf {
+      flex: 1;
+      font-size: 12px;
+      min-height: 40px;
+      padding: 8px 8px;
     }
 
     /* ── MENU FULLSCREEN MODAL ── */
@@ -901,46 +920,48 @@
     /* ── GALLERY GRID ── */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 8px;
-      padding: 8px 0;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      padding: 0;
+      background: rgba(0,0,0,0.05);
     }
     @media (min-width: 500px) {
       .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
       }
     }
     @media (min-width: 768px) {
       .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
       }
       #concepts-gallery.gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2px;
       }
     }
     @media (min-width: 1024px) {
       .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 14px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2px;
       }
       #concepts-gallery.gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
       }
     }
     .gallery-item {
       position: relative;
-      aspect-ratio: 1;
-      border-radius: 12px;
       overflow: hidden;
-      background: rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.05);
       cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
+      transition: opacity 0.2s cubic-bezier(0.22,1,0.36,1);
+      aspect-ratio: auto;
     }
-    .gallery-item:active { transform: scale(0.97); }
+    .gallery-item:active { opacity: 0.85; }
     @media (hover: hover) and (pointer: fine) {
-      .gallery-item:hover { transform: scale(1.02); }
+      .gallery-item:hover { opacity: 0.9; }
     }
     .gallery-item img, .gallery-item video {
       width: 100%;
@@ -1484,8 +1505,11 @@
 
         <div class="franchise-secondary-actions" id="franchise-cta-buttons">
           <a class="btn-franchise-pdf reveal" href="assets/matcha-times-master-franchise-20-benefits.pdf" target="_blank" rel="noopener noreferrer">📄 Download Franchise PDF</a>
-          <button class="btn-franchise-pdf reveal" type="button" id="photo-library-trigger">📸 Franchise Photo Library</button>
-          <button class="btn-franchise-pdf reveal" type="button" id="store-concepts-trigger">🏗 Franchise Store Concepts</button>
+        </div>
+
+        <div class="franchise-gallery-buttons reveal">
+          <button class="btn-franchise-pdf" type="button" id="photo-library-trigger">📸 Photo Library</button>
+          <button class="btn-franchise-pdf" type="button" id="store-concepts-trigger">🏗 Store Concepts</button>
         </div>
         <div class="franchise-secondary-actions" id="franchise-email-cta">
           <a class="btn-franchise-email reveal" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
