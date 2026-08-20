@@ -2044,12 +2044,12 @@
       currentView = 'photo';
       const container = document.getElementById('photo-gallery');
       const pos = galleryScrollPosition;
-      if (container && container.parentElement) requestAnimationFrame(() => { container.parentElement.scrollTop = pos; });
+      if (container && container.parentElement) afterLayoutSettles(() => { container.parentElement.scrollTop = pos; });
     } else if (lightboxOpenedFromView === 'concepts') {
       currentView = 'concepts';
       const container = document.getElementById('concepts-gallery');
       const pos = galleryScrollPosition;
-      if (container && container.parentElement) requestAnimationFrame(() => { container.parentElement.scrollTop = pos; });
+      if (container && container.parentElement) afterLayoutSettles(() => { container.parentElement.scrollTop = pos; });
     }
   }
 
@@ -2095,12 +2095,19 @@
   const conceptsView = document.getElementById('franchise-concepts-view');
   const franchiseScroll = document.getElementById('franchise-scroll');
 
+  // rAF is throttled/paused on hidden or background tabs, so layout-settle waits
+  // fall back to setTimeout there instead of silently never firing.
+  function afterLayoutSettles(fn) {
+    if (document.hidden) {
+      setTimeout(fn, 0);
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(fn));
+    }
+  }
+
   function forceScrollTopZero(scrollContainer) {
     if (!scrollContainer) return;
-    // Double rAF ensures layout has settled after display/DOM changes before we reset scroll.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => { scrollContainer.scrollTop = 0; });
-    });
+    afterLayoutSettles(() => { scrollContainer.scrollTop = 0; });
   }
 
   function switchView(view) {
@@ -2109,7 +2116,7 @@
       photoView.style.display = 'none';
       conceptsView.style.display = 'none';
       currentView = 'guide';
-      requestAnimationFrame(() => { if (franchiseScroll) franchiseScroll.scrollTop = guideScrollPosition; });
+      afterLayoutSettles(() => { if (franchiseScroll) franchiseScroll.scrollTop = guideScrollPosition; });
     } else if (view === 'photo') {
       guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
