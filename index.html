@@ -1017,6 +1017,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: visible;
     }
     .lightbox-img {
       max-width: 92vw;
@@ -1024,6 +1025,10 @@
       object-fit: contain;
       display: block;
       border-radius: 8px;
+      will-change: transform;
+      user-select: none;
+      -webkit-user-drag: none;
+      touch-action: pan-y;
     }
     .lightbox-video {
       max-width: 92vw;
@@ -1032,6 +1037,7 @@
       display: block;
       border-radius: 8px;
       background: #000;
+      touch-action: auto;
     }
     .lightbox-caption {
       position: absolute;
@@ -2056,6 +2062,48 @@
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxVideo = document.getElementById('lightbox-video');
   const lightboxCaption = document.getElementById('lightbox-caption');
+  const SWIPE_MIN_DISTANCE = 60;
+  const SWIPE_DISTANCE_RATIO = 0.18;
+  const SWIPE_VELOCITY = 0.55;
+  const SWIPE_DURATION = 190;
+  const SWIPE_EASING = 'cubic-bezier(0.22, 0.8, 0.3, 1)';
+  const preloadedLightboxImages = new Map();
+  let isTransitioning = false;
+  let swipeTransitionToken = 0;
+
+  function resetLightboxImageTransform() {
+    lightboxImg.style.transition = 'none';
+    lightboxImg.style.transform = 'translate3d(0, 0, 0)';
+  }
+
+  function preloadLightboxImage(file) {
+    if (!file || isVideoFile(file)) return null;
+    const src = withAssetVersion(getLightboxImagePath(file));
+    const existing = preloadedLightboxImages.get(src);
+    if (existing) return existing;
+    const image = new Image();
+    image.decoding = 'async';
+    image.src = src;
+    preloadedLightboxImages.set(src, image);
+    return image;
+  }
+
+  function preloadAdjacentLightboxImages(files, index) {
+    if (!files || !files.length) return;
+    const previousIndex = (index - 1 + files.length) % files.length;
+    const nextIndex = (index + 1) % files.length;
+    preloadLightboxImage(files[previousIndex]);
+    preloadLightboxImage(files[nextIndex]);
+  }
+
+  function waitForPreloadedLightboxImage(file) {
+    const image = preloadLightboxImage(file);
+    if (!image || image.complete) return Promise.resolve();
+    return new Promise(resolve => {
+      image.addEventListener('load', resolve, { once: true });
+      image.addEventListener('error', resolve, { once: true });
+    });
+  }
 
   function pauseCurrentMedia() {
     if (lightboxVideo.src && !lightboxVideo.paused) {
@@ -2071,6 +2119,8 @@
   function openLightbox(files, index) {
     lightboxCurrentIndex = index;
     currentGallery = files;
+    isTransitioning = false;
+    swipeTransitionToken += 1;
     updateLightboxImage(files, index);
     lightbox.classList.add('is-open');
     document.body.style.overflow = 'hidden';
@@ -2078,6 +2128,7 @@
 
   function updateLightboxImage(files, index) {
     pauseCurrentMedia();
+    resetLightboxImageTransform();
     const file = files[index];
     const isVideo = isVideoFile(file);
     const versioned = withAssetVersion(isVideo ? file : getLightboxImagePath(file));
@@ -2095,10 +2146,14 @@
       lightboxImg.src = versioned;
     }
     lightboxCaption.textContent = '';
+    preloadAdjacentLightboxImages(files, index);
   }
 
   function closeLightbox() {
+    swipeTransitionToken += 1;
+    isTransitioning = false;
     pauseCurrentMedia();
+    resetLightboxImageTransform();
     lightbox.classList.remove('is-open');
     document.body.style.overflow = '';
     // Restore to the view and scroll position where lightbox was opened.
@@ -2124,28 +2179,162 @@
     if (el) el.addEventListener('click', (e) => e.stopPropagation());
   });
 
-  document.getElementById('lightbox-prev').addEventListener('click', () => {
-    if (currentGallery) {
-      lightboxCurrentIndex = (lightboxCurrentIndex - 1 + currentGallery.length) % currentGallery.length;
-      updateLightboxImage(currentGallery, lightboxCurrentIndex);
-    }
-  });
+  function navigateLightbox(step) {
+    if (!currentGallery || isTransitioning) return;
+    lightboxCurrentIndex = (lightboxCurrentIndex + step + currentGallery.length) % currentGallery.length;
+    updateLightboxImage(currentGallery, lightboxCurrentIndex);
+  }
 
-  document.getElementById('lightbox-next').addEventListener('click', () => {
-    if (currentGallery) {
-      lightboxCurrentIndex = (lightboxCurrentIndex + 1) % currentGallery.length;
-      updateLightboxImage(currentGallery, lightboxCurrentIndex);
+  document.getElementById('lightbox-prev').addEventListener('click', () => navigateLightbox(-1));
+  document.getElementById('lightbox-next').addEventListener('click', () => navigateLightbox(1));
+
+  function waitForSwipeDuration(duration) {
+    return new Promise(resolve => setTimeout(resolve, duration));
+  }
+
+  async function animateLightboxSwipe(direction) {
+    if (!currentGallery || isTransitioning || isVideoFile(currentGallery[lightboxCurrentIndex])) return;
+    const files = currentGallery;
+    const fromIndex = lightboxCurrentIndex;
+    const nextIndex = (fromIndex + direction + files.length) % files.length;
+    const targetFile = files[nextIndex];
+    const token = ++swipeTransitionToken;
+    isTransitioning = true;
+
+    try {
+      await waitForPreloadedLightboxImage(targetFile);
+      if (token !== swipeTransitionToken || !lightbox.classList.contains('is-open') || currentGallery !== files) return;
+
+      if (reduceMotion) {
+        lightboxCurrentIndex = nextIndex;
+        updateLightboxImage(files, nextIndex);
+        return;
+      }
+
+      const viewportWidth = Math.max(window.innerWidth, lightbox.clientWidth, 1);
+      const outgoingX = direction > 0 ? -viewportWidth : viewportWidth;
+      lightboxImg.style.transition = `transform ${SWIPE_DURATION}ms ${SWIPE_EASING}`;
+      lightboxImg.style.transform = `translate3d(${outgoingX}px, 0, 0)`;
+      await waitForSwipeDuration(SWIPE_DURATION);
+      if (token !== swipeTransitionToken || !lightbox.classList.contains('is-open') || currentGallery !== files) return;
+
+      lightboxCurrentIndex = nextIndex;
+      updateLightboxImage(files, nextIndex);
+      if (isVideoFile(targetFile)) return;
+
+      const incomingX = direction > 0 ? viewportWidth : -viewportWidth;
+      lightboxImg.style.transition = 'none';
+      lightboxImg.style.transform = `translate3d(${incomingX}px, 0, 0)`;
+      requestAnimationFrame(() => {
+        if (token !== swipeTransitionToken || !lightbox.classList.contains('is-open')) return;
+        lightboxImg.style.transition = `transform ${SWIPE_DURATION}ms ${SWIPE_EASING}`;
+        lightboxImg.style.transform = 'translate3d(0, 0, 0)';
+      });
+      await waitForSwipeDuration(SWIPE_DURATION);
+    } finally {
+      if (token === swipeTransitionToken) {
+        resetLightboxImageTransform();
+        isTransitioning = false;
+      }
     }
-  });
+  }
+
+  function snapBackLightboxImage() {
+    if (isTransitioning) return;
+    if (reduceMotion) {
+      resetLightboxImageTransform();
+      return;
+    }
+    isTransitioning = true;
+    const token = ++swipeTransitionToken;
+    lightboxImg.style.transition = `transform ${SWIPE_DURATION}ms ${SWIPE_EASING}`;
+    lightboxImg.style.transform = 'translate3d(0, 0, 0)';
+    waitForSwipeDuration(SWIPE_DURATION).finally(() => {
+      if (token === swipeTransitionToken) {
+        resetLightboxImageTransform();
+        isTransitioning = false;
+      }
+    });
+  }
 
   // ── Swipe gesture ──
-  let touchStartX = 0, touchEndX = 0;
-  lightbox.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, false);
-  lightbox.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].clientX;
-    if (touchStartX - touchEndX > 50) document.getElementById('lightbox-next').click();
-    if (touchEndX - touchStartX > 50) document.getElementById('lightbox-prev').click();
-  }, false);
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+  let swipeStartTime = 0;
+  let swipeTracking = false;
+  let swipeIntent = false;
+
+  lightbox.addEventListener('touchstart', (event) => {
+    if (!lightbox.classList.contains('is-open') || !currentGallery || isTransitioning) {
+      swipeTracking = false;
+      return;
+    }
+    const file = currentGallery[lightboxCurrentIndex];
+    if (isVideoFile(file) || event.target.closest('button')) {
+      swipeTracking = false;
+      return;
+    }
+    const touch = event.changedTouches[0];
+    if (!touch) {
+      swipeTracking = false;
+      return;
+    }
+    swipeStartX = touch.clientX;
+    swipeStartY = touch.clientY;
+    swipeStartTime = Date.now();
+    swipeTracking = true;
+    swipeIntent = false;
+    lightboxImg.style.transition = 'none';
+  }, { passive: true });
+
+  lightbox.addEventListener('touchmove', (event) => {
+    if (!swipeTracking) return;
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+    const dx = touch.clientX - swipeStartX;
+    const dy = touch.clientY - swipeStartY;
+    if (!swipeIntent) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+      if (Math.abs(dx) <= Math.abs(dy) * 1.2) {
+        swipeTracking = false;
+        resetLightboxImageTransform();
+        return;
+      }
+      swipeIntent = true;
+    }
+    if (swipeIntent && event.cancelable) event.preventDefault();
+    lightboxImg.style.transform = `translate3d(${dx}px, 0, 0)`;
+  }, { passive: false });
+
+  lightbox.addEventListener('touchend', (event) => {
+    if (!swipeTracking) return;
+    const touch = event.changedTouches[0];
+    swipeTracking = false;
+    if (!touch || !swipeIntent) {
+      resetLightboxImageTransform();
+      return;
+    }
+    const dx = touch.clientX - swipeStartX;
+    const elapsed = Math.max(1, Date.now() - swipeStartTime);
+    const distanceThreshold = Math.max(SWIPE_MIN_DISTANCE, Math.round(window.innerWidth * SWIPE_DISTANCE_RATIO));
+    const velocity = Math.abs(dx) / elapsed;
+    const shouldCommit = Math.abs(dx) >= distanceThreshold || (Math.abs(dx) >= SWIPE_MIN_DISTANCE && velocity >= SWIPE_VELOCITY);
+    if (shouldCommit) {
+      animateLightboxSwipe(dx < 0 ? 1 : -1);
+    } else {
+      snapBackLightboxImage();
+    }
+  }, { passive: true });
+
+  lightbox.addEventListener('touchcancel', () => {
+    if (!swipeTracking) return;
+    swipeTracking = false;
+    if (swipeIntent) {
+      snapBackLightboxImage();
+    } else {
+      resetLightboxImageTransform();
+    }
+  }, { passive: true });
 
   // ── View switching ──
   const guideView = document.getElementById('franchise-guide-view');
