@@ -1984,6 +1984,16 @@
     return `${file}${separator}v=${encodeURIComponent(ASSET_VERSION)}`;
   }
 
+  function getLightboxImagePath(file) {
+    if (file.startsWith('assets/photo-library/')) {
+      return file.replace('assets/photo-library/', 'assets/photo-library-web/').replace(/\.[^.]+$/, '.webp');
+    }
+    if (file.startsWith('assets/store-concepts/')) {
+      return file.replace('assets/store-concepts/', 'assets/store-concepts-web/').replace(/\.[^.]+$/, '.webp');
+    }
+    return file;
+  }
+
   // ── Masonry: set grid-row-end span based on actual thumbnail aspect ratio ──
   function applyMasonrySpan(item, mediaEl) {
     const grid = item.parentElement;
@@ -2070,7 +2080,7 @@
     pauseCurrentMedia();
     const file = files[index];
     const isVideo = isVideoFile(file);
-    const versioned = withAssetVersion(file);
+    const versioned = withAssetVersion(isVideo ? file : getLightboxImagePath(file));
 
     if (isVideo) {
       lightboxImg.style.display = 'none';
