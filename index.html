@@ -695,13 +695,30 @@
     .franchise-gallery-buttons {
       display: flex;
       flex-direction: row;
-      gap: 8px;
+      gap: 10px;
+      margin-top: 14px;
     }
     .franchise-gallery-buttons .btn-franchise-pdf {
       flex: 1;
       font-size: 12px;
       min-height: 40px;
       padding: 8px 8px;
+    }
+    #franchise-email-cta {
+      margin-top: 14px;
+    }
+    #franchise-panel .btn-franchise-email {
+      background: transparent;
+      border: 1px solid rgba(28,43,22,0.25);
+      color: #16281b;
+      flex-direction: column;
+      gap: 2px;
+      padding: 10px 12px;
+    }
+    #franchise-panel .btn-franchise-email .email-address {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: #9a7a2e;
     }
 
     /* ── MENU FULLSCREEN MODAL ── */
@@ -917,39 +934,25 @@
       color: rgba(28,43,22,0.68);
     }
 
-    /* ── GALLERY GRID ── */
+    /* ── GALLERY GRID (responsive masonry via auto-fill + row-span) ── */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      grid-auto-rows: 4px;
       gap: 1px;
       padding: 0;
       background: rgba(0,0,0,0.05);
     }
-    @media (min-width: 500px) {
-      .gallery-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1px;
-      }
+    #concepts-gallery.gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
-    @media (min-width: 768px) {
-      .gallery-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
-      }
-      #concepts-gallery.gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2px;
-      }
+    @media (min-width: 500px) {
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 2px; }
+      #concepts-gallery.gallery-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2px; }
     }
     @media (min-width: 1024px) {
-      .gallery-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2px;
-      }
-      #concepts-gallery.gallery-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
-      }
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+      #concepts-gallery.gallery-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
     }
     .gallery-item {
       position: relative;
@@ -957,7 +960,7 @@
       background: rgba(0,0,0,0.05);
       cursor: pointer;
       transition: opacity 0.2s cubic-bezier(0.22,1,0.36,1);
-      aspect-ratio: auto;
+      grid-row-end: span 30; /* fallback until JS computes actual span */
     }
     .gallery-item:active { opacity: 0.85; }
     @media (hover: hover) and (pointer: fine) {
@@ -978,10 +981,9 @@
       background: rgba(0,0,0,0.3);
       font-size: 32px;
       color: #fff;
-      opacity: 0;
+      opacity: 1;
       transition: opacity 0.2s;
     }
-    .gallery-item video ~ .play-icon { opacity: 1; }
     .gallery-item:hover .play-icon { opacity: 1; }
 
     /* ── LIGHTBOX ── */
@@ -1512,7 +1514,10 @@
           <button class="btn-franchise-pdf" type="button" id="store-concepts-trigger">🏗 Store Concepts</button>
         </div>
         <div class="franchise-secondary-actions" id="franchise-email-cta">
-          <a class="btn-franchise-email reveal" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">✉️ Contact by Email</a>
+          <a class="btn-franchise-email reveal" href="mailto:info@matcha-times.com?subject=MATCHA%20TIMES%20Franchise%20Inquiry">
+            <span>✉️ Contact by Email</span>
+            <span class="email-address">info@matcha-times.com</span>
+          </a>
         </div>
       </div>
 
@@ -1544,7 +1549,7 @@
     <button class="lightbox-next" id="lightbox-next" aria-label="Next image">›</button>
     <div id="lightbox-media-container" class="lightbox-media-container">
       <img id="lightbox-img" src="" alt="" class="lightbox-img" style="display:none;">
-      <video id="lightbox-video" class="lightbox-video" style="display:none;" controls playsinline></video>
+      <video id="lightbox-video" class="lightbox-video" style="display:none;" controls playsinline preload="metadata"></video>
     </div>
     <div id="lightbox-caption" class="lightbox-caption"></div>
   </div>
@@ -1922,6 +1927,32 @@
   let galleryScrollPosition = 0;
   let lightboxOpenedFromView = 'guide';
 
+  // ── Thumbnail path helper ──
+  // "assets/photo-library/IMG_0057.JPG" → "assets/photo-library-thumb/IMG_0057.jpg"
+  function getThumbPath(file) {
+    const lastSlash = file.lastIndexOf('/');
+    const dir = file.substring(0, lastSlash);
+    const filename = file.substring(lastSlash + 1);
+    const dotIdx = filename.lastIndexOf('.');
+    const baseName = filename.substring(0, dotIdx);
+    return `${dir}-thumb/${baseName}.jpg`;
+  }
+
+  // ── Masonry: set grid-row-end span based on actual thumbnail aspect ratio ──
+  function applyMasonrySpan(item, mediaEl) {
+    const grid = item.parentElement;
+    if (!grid) return;
+    const gridStyle = getComputedStyle(grid);
+    const rowHeight = parseFloat(gridStyle.getPropertyValue('grid-auto-rows')) || 4;
+    const rowGap = parseFloat(gridStyle.getPropertyValue('gap')) || 0;
+    const itemWidth = item.getBoundingClientRect().width;
+    if (!itemWidth || !mediaEl.naturalWidth || !mediaEl.naturalHeight) return;
+    const aspectRatio = mediaEl.naturalHeight / mediaEl.naturalWidth;
+    const itemHeight = itemWidth * aspectRatio;
+    const span = Math.max(1, Math.ceil((itemHeight + rowGap) / (rowHeight + rowGap)));
+    item.style.gridRowEnd = `span ${span}`;
+  }
+
   // ── Render gallery ──
   function renderGallery(files, containerId, galleryName) {
     const container = document.getElementById(containerId);
@@ -1931,14 +1962,24 @@
     container.innerHTML = shuffled.map((file, idx) => {
       const ext = file.split('.').pop().toLowerCase();
       const isVideo = ['mp4', 'webm', 'mov'].includes(ext);
+      const thumbSrc = getThumbPath(file);
       return `
-        <div class="gallery-item" data-index="${idx}" data-file="${file}">
-          ${isVideo ? `<video src="${file}" preload="none"></video><div class="play-icon">▶</div>` : `<img src="${file}" alt="gallery" loading="lazy">`}
+        <div class="gallery-item" data-index="${idx}" data-file="${file}" data-video="${isVideo}">
+          <img src="${thumbSrc}" alt="gallery" loading="lazy" decoding="async">
+          ${isVideo ? `<div class="play-icon">▶</div>` : ''}
         </div>
       `;
     }).join('');
 
     container.querySelectorAll('.gallery-item').forEach(item => {
+      const img = item.querySelector('img');
+      const onImgReady = () => applyMasonrySpan(item, img);
+      if (img.complete && img.naturalWidth) {
+        onImgReady();
+      } else {
+        img.addEventListener('load', onImgReady, { once: true });
+      }
+
       item.addEventListener('click', (e) => {
         lightboxCurrentIndex = parseInt(item.dataset.index);
         currentGallery = shuffled;
@@ -2000,10 +2041,14 @@
     // Restore to the view and scroll position where lightbox was opened
     if (lightboxOpenedFromView === 'photo') {
       currentView = 'photo';
-      setTimeout(() => { const container = document.getElementById('photo-gallery'); if (container && container.parentElement) container.parentElement.scrollTop = galleryScrollPosition; }, 0);
+      const container = document.getElementById('photo-gallery');
+      const pos = galleryScrollPosition;
+      if (container && container.parentElement) requestAnimationFrame(() => { container.parentElement.scrollTop = pos; });
     } else if (lightboxOpenedFromView === 'concepts') {
       currentView = 'concepts';
-      setTimeout(() => { const container = document.getElementById('concepts-gallery'); if (container && container.parentElement) container.parentElement.scrollTop = galleryScrollPosition; }, 0);
+      const container = document.getElementById('concepts-gallery');
+      const pos = galleryScrollPosition;
+      if (container && container.parentElement) requestAnimationFrame(() => { container.parentElement.scrollTop = pos; });
     }
   }
 
@@ -2049,13 +2094,21 @@
   const conceptsView = document.getElementById('franchise-concepts-view');
   const franchiseScroll = document.getElementById('franchise-scroll');
 
+  function forceScrollTopZero(scrollContainer) {
+    if (!scrollContainer) return;
+    // Double rAF ensures layout has settled after display/DOM changes before we reset scroll.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => { scrollContainer.scrollTop = 0; });
+    });
+  }
+
   function switchView(view) {
     if (view === 'guide') {
       guideView.style.display = '';
       photoView.style.display = 'none';
       conceptsView.style.display = 'none';
-      if (franchiseScroll) franchiseScroll.scrollTop = guideScrollPosition;
       currentView = 'guide';
+      requestAnimationFrame(() => { if (franchiseScroll) franchiseScroll.scrollTop = guideScrollPosition; });
     } else if (view === 'photo') {
       guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
@@ -2063,7 +2116,8 @@
       conceptsView.style.display = 'none';
       currentView = 'photo';
       renderGallery(photoLibraryFiles, 'photo-gallery', 'Photo Library');
-      setTimeout(() => { const photoGal = document.getElementById('photo-gallery'); if (photoGal) photoGal.parentElement.scrollTop = 0; }, 0);
+      const photoGal = document.getElementById('photo-gallery');
+      forceScrollTopZero(photoGal ? photoGal.parentElement : null);
     } else if (view === 'concepts') {
       guideScrollPosition = franchiseScroll ? franchiseScroll.scrollTop : 0;
       guideView.style.display = 'none';
@@ -2071,7 +2125,8 @@
       conceptsView.style.display = '';
       currentView = 'concepts';
       renderGallery(storeConcepts, 'concepts-gallery', 'Store Concepts');
-      setTimeout(() => { const conceptsGal = document.getElementById('concepts-gallery'); if (conceptsGal) conceptsGal.parentElement.scrollTop = 0; }, 0);
+      const conceptsGal = document.getElementById('concepts-gallery');
+      forceScrollTopZero(conceptsGal ? conceptsGal.parentElement : null);
     }
   }
 
